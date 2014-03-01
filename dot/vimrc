@@ -1,0 +1,150 @@
+set nocompatible
+
+syntax enable
+
+filetype on
+filetype off
+set rtp+=~/.vim/bundle/vundle
+call vundle#rc()
+if filereadable(expand("~/.vimrc.bundles"))
+  source ~/.vimrc.bundles
+endif
+
+Bundle 'gmarik/vundle'
+Bundle 'scrooloose/syntastic'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-surround'
+Bundle 'kien/ctrlp.vim'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'mileszs/ack.vim'
+Bundle 'christoomey/vim-tmux-navigator'
+Bundle 'kwbdi.vim'
+
+filetype plugin indent on
+syntax off
+
+set autoindent
+set autoread
+set backspace=2
+set clipboard=unnamedplus
+set encoding=utf-8
+set expandtab
+set ignorecase
+set incsearch
+set hlsearch
+set laststatus=1
+set list
+set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
+set ruler
+set scrolloff=3
+set shiftwidth=2
+set showcmd
+set smartcase
+set softtabstop=2
+set tabstop=8
+set wildignore=*.o
+set wildmenu
+set wildmode=list:longest,full
+set completeopt=menu,longest
+set autowrite
+set whichwrap+=<,>,h,l,[,]
+set mouse=a
+if exists('$TMUX')
+  set ttymouse=xterm2
+endif
+set shortmess+=filmnrxoOtT
+set history=1000
+set hidden
+set backup
+if has('persistent_undo')
+  set undofile
+  set undolevels=1000
+  set undoreload=10000
+endif
+
+let mapleader=','
+map <s-h> gT
+map <s-l> gt
+cmap cwd lcd %:p:h
+cmap w!! w !sudo tee % >/dev/null
+noremap j gj
+noremap k gk
+nnoremap Y y$
+vnoremap < <gv
+vnoremap > >gv
+map zl zL
+map zh zH
+nmap <silent> <leader>/ :nohlsearch<cr>
+nmap <leader>q :quit<cr>
+nmap <leader>w :write
+nmap <leader>e :CtrlP<cr>
+nmap <leader>r :CtrlPMRU<cr>
+nmap <leader>a :Ack<space>
+nmap <leader>s :CtrlPBuffer<cr>
+nmap <leader>d <Plug>Kwbd
+map <silent> <leader>V :source ~/.vimrc<CR>
+      \ :filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+
+let g:ctrlp_match_window='order:ttb,max:20'
+if executable('ag')
+  let g:ackprg='ag --nogroup --column'
+  set grepprg=ag\ --nogroup\ --nocolor
+  let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
+endif
+let g:EasyMotion_leader_key=';'
+hi link EasyMotionTarget Special
+hi link EasyMotionShade  Comment
+
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+autocmd VimResized * :wincmd =
+autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+autocmd BufWinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
+autocmd FileType c,cpp setlocal shiftwidth=8 tabstop=8 noexpandtab
+      \ softtabstop=8 textwidth=80 wrap cindent cinoptions=:0,l1,t0,g0
+      \ formatoptions=tcqlron listchars=tab:\ \ ,trail:•,extends:#,nbsp:.
+autocmd FileType go :Fmt
+
+function! InitializeDirectories()
+  let parent = $HOME
+  let prefix = 'vim/'
+  let dir_list = {
+        \ 'backup': 'backupdir',
+        \ 'views': 'viewdir',
+        \ 'swap': 'directory' }
+
+  if has('persistent_undo')
+    let dir_list['undo'] = 'undodir'
+  endif
+
+  let common_dir = parent . '/.' . prefix
+
+  for [dirname, settingname] in items(dir_list)
+    let directory = common_dir . dirname . '/'
+    if exists("*mkdir")
+      if !isdirectory(directory)
+        call mkdir(directory)
+      endif
+    endif
+    if !isdirectory(directory)
+      echo "Warning: Unable to create backup directory: " . directory
+      echo "Try: mkdir -p " . directory
+    else
+      let directory = substitute(directory, " ", "\\\\ ", "g")
+      exec "set " . settingname . "=" . directory
+    endif
+  endfor
+endfunction
+call InitializeDirectories()
+
+function! StripTrailingWhitespace()
+  " Preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " do the business:
+  %s/\s\+$//e
+  " clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
+endfunction
