@@ -4,7 +4,7 @@ fi
 
 PS1='\w \$ '
 
-export EDITOR=vi
+export EDITOR=vim
 
 # Variables for building in $HOME.
 export C_INCLUDE_PATH=$HOME/lib
