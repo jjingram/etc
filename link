@@ -1,6 +1,0 @@
-#!/bin/bash
-
-for i in $(ls dot); do
-  echo "Linking $HOME/etc/dot/ to $HOME/.$i"
-  ln -sf "$HOME/etc/dot/$i" "$HOME/.$i"
-done

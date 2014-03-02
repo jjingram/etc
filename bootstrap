@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Link dot files.
+for i in $(ls dot); do
+  if [ ! -L "$HOME/.$i" ]; then
+    echo "Linking $HOME/etc/dot/ to $HOME/.$i"
+    ln -sf "$HOME/etc/dot/$i" "$HOME/.$i"
+  fi
+done
+
+# Setup vim.
+[[ ! -d ~/.vim/bundle ]] && mkdir -p ~/.vim/bundle
+if [ ! -d ~/.vim/bundle/vundle ]; then
+  git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+fi
+vim +BundleInstall +qall

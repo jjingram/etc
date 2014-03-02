@@ -1,2 +1,4 @@
 set editing-mode vi
-set blink-matching-paren on
+set keymap vi-command
+"k": history-search-backward
+"j": history-search-forward
