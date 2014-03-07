@@ -1,10 +1,9 @@
 build-essential
 git
-vim-gnome
+vim-gtk
 fortune-mod
 tmux
 wmctrl
 chromium-browser
-gnome-screensaver
 gnome-icon-theme-full
 silversearcher-ag
