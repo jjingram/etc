@@ -4,6 +4,10 @@ vim-gtk
 fortune-mod
 tmux
 wmctrl
-chromium-browser
-gnome-icon-theme-full
 silversearcher-ag
+
+tint2
+pasystray
+chromium-browser
+flashplugin-installer
+gnome-icon-theme-full
