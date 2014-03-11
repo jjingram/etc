@@ -1,13 +1,12 @@
 build-essential
-git
-vim-gtk
 fortune-mod
 tmux
-wmctrl
+vim-gtk
 silversearcher-ag
 
-tint2
-pasystray
-chromium-browser
+chromium
 flashplugin-installer
-gnome-icon-theme-full
+pasystray
+wmctrl
+zathura
+

@@ -1,6 +1,16 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Enable bash completion in interactive shells.
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+
 # Don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
 # Append to the history file, don't overwrite it.
@@ -20,6 +30,3 @@ echo
 [[ -f ~/.bash_env ]] && . ~/.bash_env
 [[ -f ~/.bash_aliases ]] && . ~/.bash_aliases
 [[ -f ~/.bash_functions ]] && . ~/.bash_functions
-
-# Start in $HOME.
-cd
