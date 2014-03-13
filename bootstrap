@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Get packages.
-sudo apt-get install $(< pkgs)
-
 # Link dot files.
 for i in $(ls dot); do
   if [ ! -L "$HOME/.$i" ]; then
