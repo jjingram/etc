@@ -13,8 +13,8 @@ Bundle 'scrooloose/nerdcommenter'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'kien/ctrlp.vim'
+Bundle 'rking/ag.vim'
 Bundle 'Lokaltog/vim-easymotion'
-Bundle 'mileszs/ack.vim'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'kwbdi.vim'
 
@@ -24,47 +24,55 @@ syntax off
 set autoindent
 set autoread
 set backspace=2
-set clipboard=unnamedplus
+set backup
+set clipboard=unnamed
+set completeopt=menu,longest
 set encoding=utf-8
 set expandtab
 set ignorecase
 set incsearch
+set hidden
+set history=1000
 set hlsearch
 set laststatus=1
 set list
-set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
+set listchars=tab:›\ ,trail:·,extends:#,nbsp:.
 set ruler
 set scrolloff=3
 set shiftwidth=2
+set shortmess+=filmnrxoOtT
 set showcmd
 set smartcase
 set softtabstop=2
 set tabstop=8
-set wildignore=*.o
-set wildmenu
-set wildmode=list:longest,full
-set completeopt=menu,longest
-set autowrite
-set whichwrap+=<,>,h,l,[,]
-set mouse=a
-if exists('$TMUX')
-  set ttymouse=xterm2
-endif
-set shortmess+=filmnrxoOtT
-set history=1000
-set hidden
-set backup
 if has('persistent_undo')
   set undofile
   set undolevels=1000
   set undoreload=10000
 endif
+set wildignore=*.o
+set wildmenu
+set wildmode=list:longest,full
+set whichwrap+=<,>,h,l,[,]
 
-let mapleader=','
+set mouse=a
+if exists('$TMUX')
+  set ttymouse=xterm2
+endif
+if exists('$TMUX')
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=0\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
 map <s-h> gT
 map <s-l> gt
-cmap cwd lcd %:p:h
-cmap w!! w !sudo tee % >/dev/null
 noremap j gj
 noremap k gk
 nnoremap Y y$
@@ -72,16 +80,30 @@ vnoremap < <gv
 vnoremap > >gv
 map zl zL
 map zh zH
+
+cmap cwd lcd %:p:h
+cmap w!! w !sudo tee % >/dev/null
+
+let mapleader=','
 nmap <silent> <leader>/ :nohlsearch<cr>
 nmap <leader>q :quit<cr>
-nmap <leader>w :write
+nmap <leader>w :write<cr>
 nmap <leader>e :CtrlP<cr>
 nmap <leader>r :CtrlPMRU<cr>
-nmap <leader>a :Ack<space>
+nmap <leader>a :Ag<space>
 nmap <leader>s :CtrlPBuffer<cr>
 nmap <leader>d <Plug>Kwbd
-map <silent> <leader>V :source ~/.vimrc<CR>
+map <silent> <leader>R :source ~/.vimrc<CR>
       \ :filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+autocmd VimResized * :wincmd =
+autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
+autocmd FileType c,cpp setlocal shiftwidth=2 tabstop=2 expandtab
+      \ softtabstop=2 textwidth=80 wrap cindent
+      \ cinoptions=h1,l1,g1,t0,i4,+4,(0,w1,W4,N-s,m1 formatoptions=tcqlron
+autocmd FileType go :Fmt
 
 let g:ctrlp_match_window='order:ttb,max:20'
 if executable('ag')
@@ -89,18 +111,12 @@ if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
   let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
 endif
+
 let g:EasyMotion_leader_key=';'
 hi link EasyMotionTarget Special
 hi link EasyMotionShade  Comment
 
-autocmd BufRead,BufNewFile *.md set filetype=markdown
-autocmd VimResized * :wincmd =
-autocmd BufWritePre <buffer> call StripTrailingWhitespace()
-autocmd BufWinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
-autocmd FileType c,cpp setlocal shiftwidth=8 tabstop=8 noexpandtab
-      \ softtabstop=8 textwidth=80 wrap cindent cinoptions=:0,l1,t0,g0
-      \ formatoptions=tcqlron listchars=tab:\ \ ,trail:•,extends:#,nbsp:.
-autocmd FileType go :Fmt
+let g:syntastic_cpp_compiler_options='-std=c++11'
 
 function! InitializeDirectories()
   let parent = $HOME

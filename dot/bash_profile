@@ -1,1 +1,3 @@
+PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
 [[ -f ~/.bashrc ]] && . ~/.bashrc

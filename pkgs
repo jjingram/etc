@@ -1,0 +1,20 @@
+# Fix slow scrolling in terminal
+Fast keyboard repeat and short delay until repeat in System Preferences/Keyboard.
+
+# Homebrew
+git
+tmux
+reattach-to-user-namespace
+macvim
+# Add /usr/local/bin/bash to /etc/shells, then:
+# $ chsh -s /usr/local/bin/bash
+bash
+bash-completion
+fortune
+the_silver_searcher
+
+# Cask (tap phinze/cask)
+google-chrome
+flux
+iterm2
+skype
