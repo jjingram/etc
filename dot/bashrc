@@ -2,8 +2,8 @@
 [[ $- != *i* ]] && return
 
 # Source global definitions (if any).
-if [ -f /etc/bashrc ]; then
-  . /etc/bashrc
+if [[ -f /etc/bashrc ]]; then
+	. /etc/bashrc
 fi
 
 # Prompt
@@ -22,11 +22,13 @@ shopt -s histverify
 
 # Automatically prepend `cd' when entering just a path.
 shopt -s autocd
+# Automatically `ls' after `cd' to a new directory.
+PROMPT_COMMAND='[[ ${__new_wd:=$PWD} != $PWD ]] && ls; __new_wd=$PWD'
 
 # Print a random, hopefully interesting, adage.
 if [[ -f /usr/local/bin/fortune ]]; then
-  fortune
-  echo
+	fortune
+	echo
 fi
 
 # Environment
@@ -53,7 +55,7 @@ alias la='ll -A'
 alias lz='ll -S'
 alias lt='ll -t'
 alias du1='du -d 1'
-alias :q=' exit'
+alias :q='exit'
 
 # Colored listing of directory in less.
 lm() { script -q /dev/null ls -hfGlAR "$@" | less -R; }
@@ -61,43 +63,44 @@ lm() { script -q /dev/null ls -hfGlAR "$@" | less -R; }
 # Colored history search in less.
 h() { history | grep --color=always $1 | less -R; }
 
-# Create an archive (*.tar.gz) from giving directory.
+# Create an archive (*.tar.gz) from given directory.
 a() { tar cfz "${1%%/}.tar.gz" "${1%%/}/"; }
 
 # Create a ZIP archive of a file or folder.
 z() { zip -r "${1%%/}.zip" "$1"; }
 
 # Extract common filetypes.
-x() {
-  if [ -f "$1" ] ; then
-    case "$1" in
-      *.t*)
-        tar xf "$1";;
-      *.bz2)
-        bunzip2 "$1";;
-      *.rar)
-        unrar x "$1";;
-      *.gz)
-        gunzip "$1";;
-      *.zip)
-        unzip "$1";;
-      *.Z)
-        uncompress "$1";;
-      *.7z)
-        7z x "$1";;
-      *)
-        echo "$0: $1: Unrecognized file extension";;
-    esac
-  else
-    echo "$0: $1: No such file"
-  fi
+x()
+{
+	if [ -f "$1" ] ; then
+		case "$1" in
+			*.t*)
+				tar xf "$1";;
+			*.bz2)
+				bunzip2 "$1";;
+			*.rar)
+				unrar x "$1";;
+			*.gz)
+				gunzip "$1";;
+			*.zip)
+				unzip "$1";;
+			*.Z)
+				uncompress "$1";;
+			*.7z)
+				7z x "$1";;
+			*)
+				echo "$0: $1: Unrecognized file extension";;
+		esac
+	else
+		echo "$0: $1: No such file"
+	fi
 }
 
 # Enable bash completion in interactive shells.
 # Disable ERR trap for when sourcing bashrc from an interactive shell.
 trap - 0 ERR
-if [ -f /usr/local/etc/bash_completion ]; then
-  . /usr/local/etc/bash_completion
+if [[ -f /usr/local/etc/bash_completion ]]; then
+	. /usr/local/etc/bash_completion
 fi
 
 # Intercept and display non-zero return codes.

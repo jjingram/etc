@@ -8,15 +8,17 @@ set rtp+=~/.vim/bundle/vundle
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
-Bundle 'scrooloose/syntastic'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
-Bundle 'kien/ctrlp.vim'
-Bundle 'rking/ag.vim'
-Bundle 'Lokaltog/vim-easymotion'
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-commentary'
+Bundle 'tpope/vim-fugitive'
+Bundle 'mileszs/ack.vim'
+Bundle 'ervandew/supertab'
 Bundle 'christoomey/vim-tmux-navigator'
+Bundle 'justinmk/vim-sneak'
 Bundle 'kwbdi.vim'
+Bundle 'matchit.zip'
+Bundle 'greplace.vim'
 
 filetype plugin indent on
 syntax off
@@ -83,16 +85,22 @@ map zh zH
 
 cmap cwd lcd %:p:h
 cmap w!! w !sudo tee % >/dev/null
+command! -nargs=1 Silent
+      \ | execute ':silent !'.<q-args>
+      \ | execute ':redraw!'
+cmap mk Silent make
 
-let mapleader=','
-nmap <silent> <leader>/ :nohlsearch<cr>
-nmap <leader>q :quit<cr>
-nmap <leader>w :write<cr>
-nmap <leader>e :CtrlP<cr>
-nmap <leader>r :CtrlPMRU<cr>
-nmap <leader>a :Ag<space>
-nmap <leader>s :CtrlPBuffer<cr>
-nmap <leader>d <Plug>Kwbd
+let mapleader=' '
+map <leader>q :quit<cr>
+map <leader>w :write<cr>
+map <leader>e :tabedit<space>
+map <leader>a :Ack<space>
+map <leader>s :buffer<space>
+map <leader>d <Plug>Kwbd
+map <leader>z :wq<cr>
+map <leader>x :bdelete<cr>
+" map <leader>c
+map <silent> <leader>/ :nohlsearch<cr>
 map <silent> <leader>R :source ~/.vimrc<CR>
       \ :filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
@@ -100,23 +108,27 @@ autocmd BufRead,BufNewFile *.md set filetype=markdown
 autocmd VimResized * :wincmd =
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
-autocmd FileType c,cpp setlocal shiftwidth=2 tabstop=2 expandtab
-      \ softtabstop=2 textwidth=80 wrap cindent
-      \ cinoptions=h1,l1,g1,t0,i4,+4,(0,w1,W4,N-s,m1 formatoptions=tcqlron
+autocmd FileType c,cpp setlocal shiftwidth=8 tabstop=8 noexpandtab
+      \ textwidth=80 wrap cindent cinoptions=:0,l1,t0,g0 formatoptions=tcqlron
+      \ listchars=tab:\ \ ,trail:·,extends:#,nbsp:.
+autocmd FileType sh setlocal shiftwidth=8 tabstop=8 noexpandtab
+      \ textwidth=80 wrap formatoptions=tcqlron
+      \ listchars=tab:\ \ ,trail:·,extends:#,nbsp:.
 autocmd FileType go :Fmt
 
-let g:ctrlp_match_window='order:ttb,max:20'
 if executable('ag')
   let g:ackprg='ag --nogroup --column'
   set grepprg=ag\ --nogroup\ --nocolor
-  let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
 endif
 
-let g:EasyMotion_leader_key=';'
-hi link EasyMotionTarget Special
-hi link EasyMotionShade  Comment
+let g:SuperTabDefaultCompletionType='context'
 
-let g:syntastic_cpp_compiler_options='-std=c++11'
+nmap f <Plug>Sneak_s
+nmap F <Plug>Sneak_S
+xmap f <Plug>Sneak_s
+xmap F <Plug>Sneak_S
+omap f <Plug>Sneak_s
+omap F <Plug>Sneak_S
 
 function! InitializeDirectories()
   let parent = $HOME
@@ -125,13 +137,10 @@ function! InitializeDirectories()
         \ 'backup': 'backupdir',
         \ 'views': 'viewdir',
         \ 'swap': 'directory' }
-
   if has('persistent_undo')
     let dir_list['undo'] = 'undodir'
   endif
-
   let common_dir = parent . '/.' . prefix
-
   for [dirname, settingname] in items(dir_list)
     let directory = common_dir . dirname . '/'
     if exists("*mkdir")

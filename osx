@@ -1,5 +1,6 @@
 # Fix slow scrolling in terminal
-Fast keyboard repeat and short delay until repeat in System Preferences/Keyboard.
+Fast keyboard repeat and short delay until repeat in System
+Preferences/Keyboard.
 
 # Homebrew
 git
@@ -12,9 +13,14 @@ bash
 bash-completion
 fortune
 the_silver_searcher
+ctags
 
 # Cask (tap phinze/cask)
 google-chrome
 flux
 iterm2
 skype
+
+# Game of Codes
+lua
+luarocks (busted)
