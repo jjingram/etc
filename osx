@@ -4,8 +4,6 @@ Preferences/Keyboard.
 
 # Homebrew
 git
-tmux
-reattach-to-user-namespace
 macvim
 # Add /usr/local/bin/bash to /etc/shells, then:
 # $ chsh -s /usr/local/bin/bash
@@ -14,12 +12,15 @@ bash-completion
 fortune
 the_silver_searcher
 ctags
+graphviz
 
 # Cask (tap phinze/cask)
 google-chrome
 flux
 iterm2
 skype
+audacity
+sublime-text
 
 # Game of Codes
 lua

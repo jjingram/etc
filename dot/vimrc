@@ -14,8 +14,7 @@ Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-fugitive'
 Bundle 'mileszs/ack.vim'
 Bundle 'ervandew/supertab'
-Bundle 'christoomey/vim-tmux-navigator'
-Bundle 'justinmk/vim-sneak'
+Bundle 'rhysd/clever-f.vim'
 Bundle 'kwbdi.vim'
 Bundle 'matchit.zip'
 Bundle 'greplace.vim'
@@ -58,16 +57,6 @@ set wildmode=list:longest,full
 set whichwrap+=<,>,h,l,[,]
 
 set mouse=a
-if exists('$TMUX')
-  set ttymouse=xterm2
-endif
-if exists('$TMUX')
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  let &t_SI = "\<Esc>]50;CursorShape=0\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
 
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -83,38 +72,30 @@ vnoremap > >gv
 map zl zL
 map zh zH
 
-cmap cwd lcd %:p:h
-cmap w!! w !sudo tee % >/dev/null
 command! -nargs=1 Silent
       \ | execute ':silent !'.<q-args>
       \ | execute ':redraw!'
+cmap cwd lcd %:p:h
+cmap w!! w !sudo tee % >/dev/null
 cmap mk Silent make
 
-let mapleader=' '
-map <leader>q :quit<cr>
-map <leader>w :write<cr>
-map <leader>e :tabedit<space>
-map <leader>a :Ack<space>
-map <leader>s :buffer<space>
-map <leader>d <Plug>Kwbd
-map <leader>z :wq<cr>
-map <leader>x :bdelete<cr>
-" map <leader>c
+" Use f and F for , and ;.
+map ; :
+let mapleader=','
+map <leader>q :Gstatus<cr>
+map <leader>w :Gcommit<cr>
+map <leader>e :Git!<space>
+map <leader>r <Plug>Kwbd
 map <silent> <leader>/ :nohlsearch<cr>
 map <silent> <leader>R :source ~/.vimrc<CR>
       \ :filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
-autocmd BufRead,BufNewFile *.md set filetype=markdown
+autocmd BufRead,BufNewFile *.md setlocal filetype=markdown spell
 autocmd VimResized * :wincmd =
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
-autocmd FileType c,cpp setlocal shiftwidth=8 tabstop=8 noexpandtab
-      \ textwidth=80 wrap cindent cinoptions=:0,l1,t0,g0 formatoptions=tcqlron
-      \ listchars=tab:\ \ ,trail:·,extends:#,nbsp:.
-autocmd FileType sh setlocal shiftwidth=8 tabstop=8 noexpandtab
-      \ textwidth=80 wrap formatoptions=tcqlron
-      \ listchars=tab:\ \ ,trail:·,extends:#,nbsp:.
-autocmd FileType go :Fmt
+autocmd FileType c,cpp call UnixStyle()
+autocmd FileType sh call UnixStyle()
 
 if executable('ag')
   let g:ackprg='ag --nogroup --column'
@@ -122,13 +103,6 @@ if executable('ag')
 endif
 
 let g:SuperTabDefaultCompletionType='context'
-
-nmap f <Plug>Sneak_s
-nmap F <Plug>Sneak_S
-xmap f <Plug>Sneak_s
-xmap F <Plug>Sneak_S
-omap f <Plug>Sneak_s
-omap F <Plug>Sneak_S
 
 function! InitializeDirectories()
   let parent = $HOME
@@ -169,4 +143,17 @@ function! StripTrailingWhitespace()
   " clean up: restore previous search history, and cursor position
   let @/=_s
   call cursor(l, c)
+endfunction
+
+function! UnixStyle()
+  setlocal shiftwidth=8
+  setlocal softtabstop=8
+  setlocal tabstop=8
+  setlocal noexpandtab
+  setlocal textwidth=79
+  setlocal wrap
+  setlocal cindent
+  setlocal cinoptions=:0,l1,t0,g0
+  setlocal formatoptions=tcqlron
+  setlocal listchars=tab:\ \ ,trail:·,extends:#,nbsp:.
 endfunction
