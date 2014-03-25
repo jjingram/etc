@@ -14,7 +14,6 @@ Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-fugitive'
 Bundle 'mileszs/ack.vim'
 Bundle 'ervandew/supertab'
-Bundle 'rhysd/clever-f.vim'
 Bundle 'kwbdi.vim'
 Bundle 'matchit.zip'
 Bundle 'greplace.vim'
@@ -79,9 +78,7 @@ cmap cwd lcd %:p:h
 cmap w!! w !sudo tee % >/dev/null
 cmap mk Silent make
 
-" Use f and F for , and ;.
-map ; :
-let mapleader=','
+let mapleader=' '
 map <leader>q :Gstatus<cr>
 map <leader>w :Gcommit<cr>
 map <leader>e :Git!<space>
