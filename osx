@@ -13,15 +13,21 @@ fortune
 the_silver_searcher
 ctags
 graphviz
+llvm
+check
+python
+rlwrap
 
 # Cask (tap phinze/cask)
 google-chrome
 flux
 iterm2
 skype
-audacity
-sublime-text
+utorrent
+vlc
+djview
 
 # Game of Codes
 lua
-luarocks (busted)
+luarocks: busted
+sublime-text

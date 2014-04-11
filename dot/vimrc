@@ -12,11 +12,9 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-fugitive'
+Bundle 'scrooloose/syntastic'
 Bundle 'mileszs/ack.vim'
-Bundle 'ervandew/supertab'
-Bundle 'kwbdi.vim'
 Bundle 'matchit.zip'
-Bundle 'greplace.vim'
 
 filetype plugin indent on
 syntax off
@@ -39,23 +37,22 @@ set list
 set listchars=tab:›\ ,trail:·,extends:#,nbsp:.
 set ruler
 set scrolloff=3
-set shiftwidth=2
 set shortmess+=filmnrxoOtT
 set showcmd
 set smartcase
-set softtabstop=2
+set shiftwidth=4
+set softtabstop=4
 set tabstop=8
-if has('persistent_undo')
-  set undofile
-  set undolevels=1000
-  set undoreload=10000
-endif
 set wildignore=*.o
 set wildmenu
 set wildmode=list:longest,full
 set whichwrap+=<,>,h,l,[,]
-
 set mouse=a
+if has('persistent_undo')
+    set undofile
+    set undolevels=1000
+    set undoreload=10000
+endif
 
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -70,87 +67,73 @@ vnoremap < <gv
 vnoremap > >gv
 map zl zL
 map zh zH
+map <silent> <c-L> :nohlsearch<cr>
 
-command! -nargs=1 Silent
-      \ | execute ':silent !'.<q-args>
-      \ | execute ':redraw!'
 cmap cwd lcd %:p:h
 cmap w!! w !sudo tee % >/dev/null
 cmap mk Silent make
-
-let mapleader=' '
-map <leader>q :Gstatus<cr>
-map <leader>w :Gcommit<cr>
-map <leader>e :Git!<space>
-map <leader>r <Plug>Kwbd
-map <silent> <leader>/ :nohlsearch<cr>
-map <silent> <leader>R :source ~/.vimrc<CR>
-      \ :filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 autocmd BufRead,BufNewFile *.md setlocal filetype=markdown spell
 autocmd VimResized * :wincmd =
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
-autocmd FileType c,cpp call UnixStyle()
-autocmd FileType sh call UnixStyle()
+autocmd FileType c,cpp,sh,awk call UnixStyle()
 
 if executable('ag')
-  let g:ackprg='ag --nogroup --column'
-  set grepprg=ag\ --nogroup\ --nocolor
+    let g:ackprg='ag --nogroup --column'
+    set grepprg=ag\ --nogroup\ --nocolor
 endif
 
-let g:SuperTabDefaultCompletionType='context'
-
 function! InitializeDirectories()
-  let parent = $HOME
-  let prefix = 'vim/'
-  let dir_list = {
-        \ 'backup': 'backupdir',
-        \ 'views': 'viewdir',
-        \ 'swap': 'directory' }
-  if has('persistent_undo')
-    let dir_list['undo'] = 'undodir'
-  endif
-  let common_dir = parent . '/.' . prefix
-  for [dirname, settingname] in items(dir_list)
-    let directory = common_dir . dirname . '/'
-    if exists("*mkdir")
-      if !isdirectory(directory)
-        call mkdir(directory)
-      endif
+    let parent = $HOME
+    let prefix = 'vim/'
+    let dir_list = {
+                \ 'backup': 'backupdir',
+                \ 'views': 'viewdir',
+                \ 'swap': 'directory' }
+    if has('persistent_undo')
+        let dir_list['undo'] = 'undodir'
     endif
-    if !isdirectory(directory)
-      echo "Warning: Unable to create backup directory: " . directory
-      echo "Try: mkdir -p " . directory
-    else
-      let directory = substitute(directory, " ", "\\\\ ", "g")
-      exec "set " . settingname . "=" . directory
-    endif
-  endfor
+    let common_dir = parent . '/.' . prefix
+    for [dirname, settingname] in items(dir_list)
+        let directory = common_dir . dirname . '/'
+        if exists("*mkdir")
+            if !isdirectory(directory)
+                call mkdir(directory)
+            endif
+        endif
+        if !isdirectory(directory)
+            echo "Warning: Unable to create backup directory: " . directory
+            echo "Try: mkdir -p " . directory
+        else
+            let directory = substitute(directory, " ", "\\\\ ", "g")
+            exec "set " . settingname . "=" . directory
+        endif
+    endfor
 endfunction
 call InitializeDirectories()
 
 function! StripTrailingWhitespace()
-  " Preparation: save last search, and cursor position.
-  let _s=@/
-  let l = line(".")
-  let c = col(".")
-  " do the business:
-  %s/\s\+$//e
-  " clean up: restore previous search history, and cursor position
-  let @/=_s
-  call cursor(l, c)
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " do the business:
+    %s/\s\+$//e
+    " clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
 endfunction
 
 function! UnixStyle()
-  setlocal shiftwidth=8
-  setlocal softtabstop=8
-  setlocal tabstop=8
-  setlocal noexpandtab
-  setlocal textwidth=79
-  setlocal wrap
-  setlocal cindent
-  setlocal cinoptions=:0,l1,t0,g0
-  setlocal formatoptions=tcqlron
-  setlocal listchars=tab:\ \ ,trail:·,extends:#,nbsp:.
+    setlocal shiftwidth=8
+    setlocal softtabstop=8
+    setlocal tabstop=8
+    setlocal noexpandtab
+    setlocal textwidth=79
+    setlocal wrap
+    setlocal cindent
+    setlocal cinoptions=:0,l1,t0,g0
+    setlocal formatoptions=tcqlron
+    setlocal listchars=tab:\ \ ,trail:·,extends:#,nbsp:.
 endfunction

@@ -1,3 +1,9 @@
 [user]
 	email = jing0012@uni.sydney.edu.au
 	name = Jarrod Jeffrey Ingram
+[diff]
+	tool = vimdiff
+[merge]
+	tool = vimdiff
+[difftool]
+	prompt = false

@@ -45,7 +45,6 @@ alias ping='ping -c 5'
 alias mkdir='mkdir -pv'
 alias more='less'
 alias grep='grep --color=auto'
-alias diff='vimdiff'
 
 # New commands
 alias l='ls'
