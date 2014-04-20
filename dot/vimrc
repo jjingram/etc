@@ -12,8 +12,14 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-unimpaired'
+Bundle 'tpope/vim-repeat'
+Bundle 'kana/vim-textobj-user'
+Bundle 'kana/vim-textobj-indent'
 Bundle 'scrooloose/syntastic'
-Bundle 'mileszs/ack.vim'
+Bundle 'rking/ag.vim'
+Bundle 'kien/ctrlp.vim'
+Bundle 'skwp/greplace.vim'
 Bundle 'matchit.zip'
 
 filetype plugin indent on
@@ -43,7 +49,7 @@ set smartcase
 set shiftwidth=4
 set softtabstop=4
 set tabstop=8
-set wildignore=*.o
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set wildmenu
 set wildmode=list:longest,full
 set whichwrap+=<,>,h,l,[,]
@@ -71,6 +77,10 @@ map <silent> <c-L> :nohlsearch<cr>
 
 cmap cwd lcd %:p:h
 cmap w!! w !sudo tee % >/dev/null
+
+command! -nargs=1 Silent
+            \ | execute ':silent !'.<q-args>
+            \ | execute ':redraw!'
 cmap mk Silent make
 
 autocmd BufRead,BufNewFile *.md setlocal filetype=markdown spell
@@ -79,9 +89,12 @@ autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
 autocmd FileType c,cpp,sh,awk call UnixStyle()
 
+let g:ctrlp_match_window = 'order:ttb,max:20'
+let g:wildfire_objects = ["i'", 'i"', 'i)', 'i]', 'i}', 'ii', 'it', 'ip']
+
 if executable('ag')
-    let g:ackprg='ag --nogroup --column'
     set grepprg=ag\ --nogroup\ --nocolor
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 endif
 
 function! InitializeDirectories()

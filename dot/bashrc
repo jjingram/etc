@@ -7,7 +7,7 @@ if [[ -f /etc/bashrc ]]; then
 fi
 
 # Prompt
-PS1='\w \$ '
+PS1='\e[0m\w \$ \e[0m'
 
 # Don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
@@ -46,24 +46,22 @@ alias mkdir='mkdir -pv'
 alias more='less'
 alias grep='grep --color=auto'
 
-# New commands
-alias l='ls'
+# ls
 alias ll='ls -l'
 alias lr='ls -R'
 alias la='ll -A'
-alias lz='ll -S'
-alias lt='ll -t'
 alias du1='du -d 1'
-alias :q='exit'
 
-# Colored listing of directory in less.
-lm() { script -q /dev/null ls -hfGlAR "$@" | less -R; }
+# Shortcuts
+alias q='exit'
+alias c='clear'
+alias l='ls'
 
 # Colored history search in less.
 h() { history | grep --color=always $1 | less -R; }
 
 # Create an archive (*.tar.gz) from given directory.
-a() { tar cfz "${1%%/}.tar.gz" "${1%%/}/"; }
+a() { tar cvfz "${1%%/}.tar.gz" "${1%%/}/"; }
 
 # Create a ZIP archive of a file or folder.
 z() { zip -r "${1%%/}.zip" "$1"; }

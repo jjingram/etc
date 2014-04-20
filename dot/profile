@@ -1,6 +1,8 @@
-PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+PATH=$HOME/bin:$HOME/.cabal/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 alias love='/Applications/love.app/Contents/MacOS/love'
 alias pg-usyd='psql -h postgres.it.usyd.edu.au jing0012 jing0012'
 
-[[ -f ~/.bashrc ]] && . ~/.bashrc
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi

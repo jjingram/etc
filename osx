@@ -1,33 +1,28 @@
-# Fix slow scrolling in terminal
-Fast keyboard repeat and short delay until repeat in System
-Preferences/Keyboard.
+#!/bin/bash
 
-# Homebrew
-git
-macvim
-# Add /usr/local/bin/bash to /etc/shells, then:
-# $ chsh -s /usr/local/bin/bash
-bash
-bash-completion
-fortune
-the_silver_searcher
-ctags
-graphviz
-llvm
-check
-python
-rlwrap
+# Disable press-and-hold for keys in favor of key repeat
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
-# Cask (tap phinze/cask)
-google-chrome
-flux
-iterm2
-skype
-utorrent
-vlc
-djview
+# Set a blazingly fast keyboard repeat rate
+defaults write NSGlobalDomain KeyRepeat -int 0.02
 
-# Game of Codes
-lua
-luarocks: busted
-sublime-text
+# Set a shorter delay until key repeat
+defaults write NSGlobalDomain InitialKeyRepeat -int 12
+
+# Save to disk (not to iCloud) by default
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+# Disable Dashboard
+defaults write com.apple.dashboard mcx-disabled -bool true
+
+# Don’t show Dashboard as a Space
+defaults write com.apple.dock dashboard-in-overlay -bool true
+
+# Set default location for new Finder windows
+# Use `PdDe` and `file://${HOME}/Desktop/` for Desktop, and
+# use `PfLo` and `file:///full/path/here/` for another directory
+defaults write com.apple.finder NewWindowTarget -string "PfLo"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
+
+# Don’t display the annoying prompt when quitting iTerm
+defaults write com.googlecode.iterm2 PromptOnQuit -bool false

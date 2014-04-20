@@ -1,0 +1,27 @@
+# TODO: manage packages from this file
+
+# Homebrew
+git
+macvim
+bash
+bash-completion
+fortune
+the_silver_searcher
+ctags
+graphviz
+rlwrap
+
+# Cask (tap phinze/cask)
+google-chrome
+flux
+iterm2
+skype
+utorrent
+vlc
+djview
+gimp
+
+# Game of Codes
+lua
+luarocks: busted
+sublime-text
