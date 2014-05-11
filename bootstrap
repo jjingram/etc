@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Setup zsh.
+[[ ! -d ~/.oh-my-zsh ]] && curl -L http://install.ohmyz.sh | sh
+
 # Link dot files.
 for i in $(ls dot); do
   if [ ! -L "$HOME/.$i" ]; then

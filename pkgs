@@ -1,27 +1,25 @@
 # TODO: manage packages from this file
 
 # Homebrew
+zsh
+tmux
 git
 macvim
-bash
-bash-completion
-fortune
 the_silver_searcher
 ctags
-graphviz
 rlwrap
+p7zip
+tree
+postgresql
+reattach-to-user-namespace
+valgrind
 
 # Cask (tap phinze/cask)
+iterm2
 google-chrome
 flux
-iterm2
+bettertouchtool
 skype
 utorrent
 vlc
 djview
-gimp
-
-# Game of Codes
-lua
-luarocks: busted
-sublime-text

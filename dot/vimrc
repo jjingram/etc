@@ -13,10 +13,12 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-unimpaired'
-Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-abolish'
+Bundle 'tpope/vim-vinegar'
 Bundle 'kana/vim-textobj-user'
 Bundle 'kana/vim-textobj-indent'
 Bundle 'scrooloose/syntastic'
+Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'rking/ag.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'skwp/greplace.vim'
@@ -73,7 +75,7 @@ vnoremap < <gv
 vnoremap > >gv
 map zl zL
 map zh zH
-map <silent> <c-L> :nohlsearch<cr>
+map <silent> <leader>/ :nohlsearch<cr>
 
 cmap cwd lcd %:p:h
 cmap w!! w !sudo tee % >/dev/null
@@ -88,6 +90,7 @@ autocmd VimResized * :wincmd =
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
 autocmd FileType c,cpp,sh,awk call UnixStyle()
+autocmd FileType python call PyStyle()
 
 let g:ctrlp_match_window = 'order:ttb,max:20'
 let g:wildfire_objects = ["i'", 'i"', 'i)', 'i]', 'i}', 'ii', 'it', 'ip']
@@ -131,9 +134,9 @@ function! StripTrailingWhitespace()
     let _s=@/
     let l = line(".")
     let c = col(".")
-    " do the business:
+    " Let's do this!
     %s/\s\+$//e
-    " clean up: restore previous search history, and cursor position
+    " Clean up: restore previous search history, and cursor position
     let @/=_s
     call cursor(l, c)
 endfunction
@@ -149,4 +152,9 @@ function! UnixStyle()
     setlocal cinoptions=:0,l1,t0,g0
     setlocal formatoptions=tcqlron
     setlocal listchars=tab:\ \ ,trail:·,extends:#,nbsp:.
+endfunction
+
+function! PyStyle()
+    let g:pyindent_open_paren = '&sw'
+    let g:pyindent_continue = '&sw'
 endfunction
