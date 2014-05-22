@@ -22,10 +22,12 @@ Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'rking/ag.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'skwp/greplace.vim'
+Bundle 'altercation/vim-colors-solarized'
 Bundle 'matchit.zip'
 
 filetype plugin indent on
-syntax off
+syntax on
+color solarized
 
 set autoindent
 set autoread
