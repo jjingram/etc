@@ -1,18 +1,19 @@
 # TODO: manage packages from this file
 
 # Homebrew
-zsh
-tmux
 git
-macvim
 the_silver_searcher
 ctags
-rlwrap
 p7zip
-tree
 postgresql
-reattach-to-user-namespace
 valgrind
+zsh
+reattach-to-user-namespace
+tmux
+macvim
+# cp -r /usr/local/Cellar/macvim/7.4-73/MacVim.app ~/Applications
+emacs # --HEAD --use-git-head --cocoa --with-gnutls
+# cp -r /usr/local/Celler/emacs/HEAD/Emacs.app ~/Applications/
 
 # Cask (tap phinze/cask)
 iterm2
