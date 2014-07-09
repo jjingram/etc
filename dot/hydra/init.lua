@@ -3,9 +3,6 @@ dofile(package.searchpath("up", package.path))
 
 local mod = {"alt"}
 
--- Launch at startup.
-autolaunch.set(true)
-
 -- Hot reload.
 pathwatcher.new(os.getenv("HOME") .. "/.hydra/", hydra.reload):start()
 
