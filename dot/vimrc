@@ -15,8 +15,8 @@ Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-abolish'
 Bundle 'kana/vim-textobj-user'
 Bundle 'kana/vim-textobj-indent'
-Bundle 'scrooloose/syntastic'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'scrooloose/syntastic'
 Bundle 'hynek/vim-python-pep8-indent'
 Bundle 'vivien/vim-addon-linux-coding-style'
 Bundle 'christoomey/vim-tmux-navigator'
@@ -28,48 +28,29 @@ color solarized
 set autoindent
 set autoread
 set backspace=indent,eol,start
-set backup
 set clipboard=unnamed
-set ruler
-set showcmd
+set laststatus=1 ruler showcmd
 set completeopt=menu,longest
 set encoding=utf-8
-set expandtab
-set ignorecase
-set incsearch
+set ignorecase incsearch hlsearch smartcase
 set hidden
 set history=1000
-set hlsearch
 set scrolloff=3
-set scrolljump=1
 set shortmess+=filmnrxoOtT
-set showcmd
-set smartcase
-set shiftwidth=2
-set softtabstop=2
-set tabstop=8
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-set wildmenu
-set wildmode=list:longest,full
+set expandtab shiftwidth=2 softtabstop=2 tabstop=8
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip wildmenu wildmode=list:longest,full
 set whichwrap=b,s,h,l,<,>,[,]
-set mouse=a
-set mousehide
-set splitright splitbelow
+set mouse=a mousehide
 set noerrorbells visualbell t_vb=
-set iskeyword-=.
-set iskeyword-=#
-set iskeyword-=-
-set winminheight=0
+set backup
 if has('persistent_undo')
-  set undofile
-  set undolevels=1000
-  set undoreload=10000
+  set undofile undolevels=1000 undoreload=10000
 endif
 
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+map <c-h> <c-w>h
+map <c-j> <c-w>j
+map <c-k> <c-w>k
+map <c-l> <c-w>l
 map <s-h> gT
 map <s-l> gt
 noremap j gj
@@ -79,7 +60,7 @@ vnoremap < <gv
 vnoremap > >gv
 map zl zL
 map zh zH
-map <silent> <leader>/ :nohlsearch<cr>
+map <silent> <c-_> :nohlsearch<cr>  " <c-_> maps to <c-/>
 cmap cwd lcd %:p:h
 cmap cd. lcd %:p:h
 cmap w!! w !sudo tee % >/dev/null
@@ -93,6 +74,11 @@ autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+augroup restoreCursor
+  autocmd!
+  autocmd BufWinEnter * call RestoreCursor()
+augroup END
 
 function! InitializeDirectories()
   let parent = $HOME
@@ -141,8 +127,3 @@ function! RestoreCursor()
     return 1
   endif
 endfunction
-
-augroup restoreCursor
-  autocmd!
-  autocmd BufWinEnter * call RestoreCursor()
-augroup END
