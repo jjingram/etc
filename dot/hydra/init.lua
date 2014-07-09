@@ -28,7 +28,7 @@ hotkey.bind(mod, "K", win.max)
 hotkey.bind(mod, "L", win.right)
 
 -- Applications.
-hotkey.bind(mod, "Q", function() application.launchorfocus("MacVim") end)
+hotkey.bind(mod, "Q", function() application.launchorfocus("iTerm") end)
 hotkey.bind(mod, "W", function() application.launchorfocus("Google Chrome") end)
 hotkey.bind(mod, "E", function() application.launchorfocus("Finder") end)
 
