@@ -2,7 +2,6 @@
 
 # Homebrew
 git
-the_silver_searcher
 ctags
 p7zip
 postgresql
@@ -17,7 +16,6 @@ python
 iterm2
 google-chrome
 flux
-bettertouchtool
 skype
 utorrent
 vlc
