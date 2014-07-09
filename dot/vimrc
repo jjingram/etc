@@ -13,10 +13,11 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-abolish'
+Bundle 'tpope/vim-vinegar'
+Bundle 'tpope/vim-fugitive'
 Bundle 'kana/vim-textobj-user'
 Bundle 'kana/vim-textobj-indent'
 Bundle 'altercation/vim-colors-solarized'
-Bundle 'scrooloose/syntastic'
 Bundle 'hynek/vim-python-pep8-indent'
 Bundle 'vivien/vim-addon-linux-coding-style'
 Bundle 'christoomey/vim-tmux-navigator'
@@ -47,26 +48,25 @@ if has('persistent_undo')
   set undofile undolevels=1000 undoreload=10000
 endif
 
-map <c-h> <c-w>h
-map <c-j> <c-w>j
-map <c-k> <c-w>k
-map <c-l> <c-w>l
-map <s-h> gT
-map <s-l> gt
-noremap j gj
-noremap k gk
+runtime macros/matchit.vim
+runtime ftplugin/man.vim
+
+map zl zL
+map zh zH
+map j gj
+map k gk
+map K :<c-u>exe "Man" v:count "<c-r><c-w>"<cr>
+map <silent> <c-_> :nohlsearch<cr>  " <c-_> maps to <c-/>
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
+nnoremap <s-h> gT
+nnoremap <s-l> gt
 nnoremap Y y$
 vnoremap < <gv
 vnoremap > >gv
-map zl zL
-map zh zH
-map <silent> <c-_> :nohlsearch<cr>  " <c-_> maps to <c-/>
-cmap cwd lcd %:p:h
-cmap cd. lcd %:p:h
 cmap w!! w !sudo tee % >/dev/null
-
-runtime ftplugin/man.vim
-nnoremap K :<c-u>exe "Man" v:count "<c-r><c-w>"<cr>
 
 autocmd BufRead,BufNewFile *.md setlocal filetype=markdown spell
 autocmd VimResized * :wincmd =
@@ -74,11 +74,6 @@ autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
-
-augroup restoreCursor
-  autocmd!
-  autocmd BufWinEnter * call RestoreCursor()
-augroup END
 
 function! InitializeDirectories()
   let parent = $HOME
@@ -119,11 +114,4 @@ function! StripTrailingWhitespace()
   " Clean up: restore previous search history, and cursor position
   let @/=_s
   call cursor(l, c)
-endfunction
-
-function! RestoreCursor()
-  if line("'\"") <= line("$")
-    normal! g`"
-    return 1
-  endif
 endfunction
