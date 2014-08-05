@@ -1,6 +1,7 @@
 dofile(package.searchpath("win", package.path))
 dofile(package.searchpath("up", package.path))
 
+autolaunch.set(true)
 local mod = {"alt"}
 
 -- Hot reload.
@@ -22,10 +23,7 @@ menu.show(function()
 end)
 
 -- Window management.
-hotkey.bind(mod, "H", win.left)
-hotkey.bind(mod, "J", win.min)
-hotkey.bind(mod, "K", win.max)
-hotkey.bind(mod, "L", win.right)
+hotkey.bind(mod, "F", win.max)
 
 -- Applications.
 hotkey.bind(mod, "Q", function() application.launchorfocus("iTerm") end)
@@ -40,4 +38,3 @@ local lastcheckedupdates = settings.get('lastcheckedupdates')
 if lastcheckedupdates == nil or lastcheckedupdates <= os.time() - timer.days(7) then
   checkforupdates()
 end
-

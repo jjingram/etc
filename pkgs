@@ -1,5 +1,3 @@
-# TODO: manage packages from this file
-
 # Homebrew
 git
 ctags
@@ -8,16 +6,22 @@ postgresql
 valgrind
 zsh
 reattach-to-user-namespace
+cmake
 tmux
-macvim
 python
+macvim
+lua
+luarocks (busted)
+aspell --lang=en
+ack
+emacs --cocoa --HEAD --use-git-head -srgb
 
 # Cask (tap phinze/cask)
 iterm2
 google-chrome
 flux
-skype
-utorrent
-vlc
+transmission
+mpv
 djview
 hydra
+love

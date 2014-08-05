@@ -1,87 +1,117 @@
 set nocompatible
-
-syntax enable
-
-filetype on
 filetype off
 set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
-
-Bundle 'gmarik/vundle'
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-commentary'
-Bundle 'tpope/vim-unimpaired'
-Bundle 'tpope/vim-abolish'
-Bundle 'tpope/vim-vinegar'
-Bundle 'tpope/vim-fugitive'
-Bundle 'kana/vim-textobj-user'
-Bundle 'kana/vim-textobj-indent'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'hynek/vim-python-pep8-indent'
-Bundle 'vivien/vim-addon-linux-coding-style'
-Bundle 'christoomey/vim-tmux-navigator'
-
+call vundle#begin()
+Plugin 'gmarik/vundle'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-abolish'
+Plugin 'tpope/vim-vinegar'
+Plugin 'tpope/vim-endwise'
+Plugin 'kana/vim-textobj-user'
+Plugin 'kana/vim-textobj-indent'
+Plugin 'scrooloose/syntastic'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'skwp/greplace.vim'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'hynek/vim-python-pep8-indent'
+call vundle#end()
 filetype plugin indent on
-syntax on
-color solarized
 
-set autoindent
-set autoread
-set backspace=indent,eol,start
-set clipboard=unnamed
-set laststatus=1 ruler showcmd
-set completeopt=menu,longest
-set encoding=utf-8
-set ignorecase incsearch hlsearch smartcase
-set hidden
-set history=1000
-set scrolloff=3
-set shortmess+=filmnrxoOtT
-set expandtab shiftwidth=2 softtabstop=2 tabstop=8
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip wildmenu wildmode=list:longest,full
-set whichwrap=b,s,h,l,<,>,[,]
-set mouse=a mousehide
-set noerrorbells visualbell t_vb=
-set backup
-if has('persistent_undo')
-  set undofile undolevels=1000 undoreload=10000
-endif
+syntax on
+scriptencoding utf-8
+color solarized
 
 runtime macros/matchit.vim
 runtime ftplugin/man.vim
 
+set autoindent
+set autoread
+set backspace=indent,eol,start whichwrap=b,s,h,l,<,>,[,] nowrap
+set clipboard=unnamed
+set laststatus=2 ruler showcmd
+set encoding=utf-8
+set nojoinspaces
+set ignorecase incsearch hlsearch smartcase
+set hidden
+set history=1000
+set scrolloff=1
+set shortmess+=filmnrxoOtT
+set expandtab shiftwidth=2 softtabstop=2 tabstop=8
+set wildmenu wildmode=list:longest,full
+set mouse=a mousehide
+set noerrorbells visualbell t_vb=
+set winminheight=0
+set backup
+set completeopt=menu,longest
+if has('persistent_undo')
+  set undofile undolevels=1000 undoreload=10000
+endif
+ 
+" '\' doesn't have a consistent location.
+let mapleader = ','
+map ; :
+" Easier horizontal shifting.
 map zl zL
 map zh zH
-map j gj
-map k gk
-map K :<c-u>exe "Man" v:count "<c-r><c-w>"<cr>
-map <silent> <c-_> :nohlsearch<cr>  " <c-_> maps to <c-/>
-nnoremap <c-h> <c-w>h
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-l> <c-w>l
-nnoremap <s-h> gT
-nnoremap <s-l> gt
+" Wrapped lines goes down/up to next row, rather than next line in file.
+nnoremap j gj
+nnoremap k gk
+" Use Vim for displaying man pages.
+nnoremap <silent> K :<c-u>exe "Man" v:count "<c-r><c-w>"<cr>
+" Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
+" Shift without exiting visual mode.
 vnoremap < <gv
 vnoremap > >gv
-cmap w!! w !sudo tee % >/dev/null
+" Stop highlighting after a search.
+map <silent> <leader>/ :nohlsearch<cr>
+" Toggle paste mode.
+map <silent> <leader>p :set paste!<cr>
+" Source vim configuration.
+map <silent> <leader>v :source $HOME/.vimrc<cr>
 
+" Only strip trailing whitespace for certain file types.
+autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml,perl,lua
+      \ autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+" Modula2, really?
 autocmd BufRead,BufNewFile *.md setlocal filetype=markdown spell
-autocmd VimResized * :wincmd =
-autocmd BufWritePre <buffer> call StripTrailingWhitespace()
-autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1)
+" Automatically switch to the current file directory when a new buffer is
+" opened.
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
-autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+" Highlight characters beyond 80 columns.
+autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
+" Unix style.
+autocmd FileType c,cpp,sh,make,zsh setlocal ts=8 sw=8 sts=8 tw=80 noet cin
+      \ fo=tcqlron cino=:0,l1,t0,g0
 
+" EasyMotion
+" Disable default mappings.
+let g:EasyMotion_do_mapping = 0
+" Turn on the case sensitive feature.
+let g:EasyMotion_smartcase = 1
+" Bi-directional find motion, jump to anywhere you want with minimal
+" keystrokes, with just one key binding: `<space>{char}{label}`.
+nmap <space> <plug>(easymotion-s)
+
+" vim-lua-ftplugin
+" Syntastic for syntax checking.
+let g:lua_check_syntax = 0
+let g:lua_check_globals = 0
+let g:lua_define_completion_mappings = 0
+
+" Setup directories for backup, view and swap files under ~/.vim/.
 function! InitializeDirectories()
   let parent = $HOME
   let prefix = 'vim/'
   let dir_list = {
         \ 'backup': 'backupdir',
         \ 'views': 'viewdir',
-        \ 'swap': 'directory' }
+        \ 'swap': 'directory',
+        \ }
   if has('persistent_undo')
     let dir_list['undo'] = 'undodir'
   endif
@@ -111,7 +141,24 @@ function! StripTrailingWhitespace()
   let c = col(".")
   " Let's do this!
   %s/\s\+$//e
-  " Clean up: restore previous search history, and cursor position
+  " Cleanup: restore previous search history, and cursor position
   let @/=_s
   call cursor(l, c)
 endfunction
+
+function! s:RunShellCommand(cmdline)
+  botright new
+  setlocal buftype=nofile
+  setlocal bufhidden=delete
+  setlocal nobuflisted
+  setlocal noswapfile
+  setlocal nowrap
+  setlocal filetype=shell
+  setlocal syntax=shell
+  call setline(1, a:cmdline)
+  call setline(2, substitute(a:cmdline, '.', '=', 'g'))
+  execute 'silent $read !' . escape(a:cmdline, '%#')
+  setlocal nomodifiable
+  1
+endfunction
+command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
