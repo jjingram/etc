@@ -12,9 +12,8 @@ python
 macvim
 lua
 luarocks (busted)
-aspell --lang=en
 ack
-emacs --cocoa --HEAD --use-git-head -srgb
+wget
 
 # Cask (tap phinze/cask)
 iterm2
@@ -25,3 +24,5 @@ mpv
 djview
 hydra
 love
+caskroom/versions/java7
+intellij-idea-ce
