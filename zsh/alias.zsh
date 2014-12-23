@@ -1,3 +1,3 @@
 alias q='exit'
+alias e='mvim -v'
 alias c='clear'
-alias vi='mvim -v'

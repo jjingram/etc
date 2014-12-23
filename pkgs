@@ -1,28 +1,31 @@
 # Homebrew
 git
+zsh
+ack
+wget
 ctags
 p7zip
-postgresql
 valgrind
-zsh
-reattach-to-user-namespace
 cmake
+reattach-to-user-namespace
 tmux
 python
 macvim
 lua
 luarocks (busted)
-ack
-wget
+postgresql
 
 # Cask (tap phinze/cask)
+mjolnir
 iterm2
 google-chrome
 flux
 transmission
 mpv
 djview
-hydra
-love
 caskroom/versions/java7
 intellij-idea-ce
+
+# Luarocks
+mjolnir.application
+mjolnir.hotkey
