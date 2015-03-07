@@ -5,7 +5,6 @@ ack
 wget
 ctags
 p7zip
-valgrind
 cmake
 reattach-to-user-namespace
 tmux

@@ -1,3 +1,1 @@
-rocks_servers = {
-    'http://rocks.moonscript.org'
-}
+rocks_servers = { 'http://rocks.moonscript.org' }
