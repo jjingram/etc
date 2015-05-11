@@ -1,0 +1,11 @@
+caskroom/cask/brew-cask
+git
+zsh
+ctags
+p7zip
+the_silver_searcher
+reattach-to-user-namespace
+tmux
+macvim --override-system-vim
+postgresql
+go

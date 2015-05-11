@@ -17,6 +17,8 @@ Plugin 'Lokaltog/vim-easymotion'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'scrooloose/syntastic'
 Plugin 'skwp/greplace.vim'
+Plugin 'hynek/vim-python-pep8-indent'
+Plugin 'fatih/vim-go'
 call vundle#end()
 filetype plugin indent on
 

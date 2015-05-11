@@ -5,3 +5,5 @@ if [ $(uname) = 'Darwin' ]; then
 else
 	alias e='vim'
 fi
+alias vi=e
+alias vim=e

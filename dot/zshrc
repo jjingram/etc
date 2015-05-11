@@ -75,3 +75,10 @@ export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
+
+# TexLive
+PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-darwin
+
+# Go
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
