@@ -10,19 +10,19 @@ Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-abolish'
 Plugin 'tpope/vim-vinegar'
 Plugin 'tpope/vim-endwise'
+Plugin 'tpope/vim-fugitive'
 Plugin 'kana/vim-textobj-user'
 Plugin 'kana/vim-textobj-indent'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'scrooloose/syntastic'
-Plugin 'skwp/greplace.vim'
 Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'fatih/vim-go'
 call vundle#end()
 filetype plugin indent on
 
-syntax on
+syntax off
 scriptencoding utf-8
 color solarized
 
@@ -47,13 +47,14 @@ set noerrorbells visualbell t_vb=
 set winminheight=0
 set backup
 set completeopt=menu,longest
+set wildmenu
 if has('persistent_undo')
     set undofile undolevels=1000 undoreload=10000
 endif
 
-" '\' doesn't have a consistent location.
-let mapleader = ','
-map ; :
+set guifont=Monaco:h15
+set guioptions-=rL
+
 " Easier horizontal shifting.
 map zl zL
 map zh zH
@@ -88,9 +89,10 @@ autocmd BufRead,BufNewFile *.md setlocal filetype=markdown spell
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 " Highlight characters beyond 80 columns.
 autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
+" Go style.
+autocmd FileType go setlocal ts=8 sw=8 sts=8 tw=80 noet
 " Unix style.
-autocmd FileType c,cpp,sh,make,zsh setlocal ts=8 sw=8 sts=8 tw=80 noet cin
-            \ fo=tcqlron cino=:0,l1,t0,g0,(s,m1,j1,J1
+autocmd FileType c,cpp,sh,make,zsh setlocal ts=8 sw=8 sts=8 tw=80 noet cin fo=tcqlron cino=:0,l1,t0,g0,(s,m1,j1,J1
 
 " EasyMotion
 " Disable default mappings.

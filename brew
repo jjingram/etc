@@ -6,6 +6,7 @@ p7zip
 the_silver_searcher
 reattach-to-user-namespace
 tmux
-macvim --override-system-vim
 postgresql
 go
+gtk+
+valgrind --HEAD

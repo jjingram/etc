@@ -24,7 +24,7 @@ ZSH_THEME="jji"
 # DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to disable command auto-correction.
 # DISABLE_CORRECTION="true"
@@ -82,3 +82,6 @@ PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-darwin
 # Go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
+
+# XQuartz
+export PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig

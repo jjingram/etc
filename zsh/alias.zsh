@@ -1,9 +1,6 @@
 alias q='exit'
 alias c='clear'
 if [ $(uname) = 'Darwin' ]; then
-	alias e='mvim -v'
-else
-	alias e='vim'
+	export EDITOR='mvim -v'
 fi
-alias vi=e
-alias vim=e
+alias e=$EDITOR
