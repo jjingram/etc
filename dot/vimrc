@@ -10,7 +10,6 @@ Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-abolish'
 Plugin 'tpope/vim-vinegar'
 Plugin 'tpope/vim-endwise'
-Plugin 'tpope/vim-fugitive'
 Plugin 'kana/vim-textobj-user'
 Plugin 'kana/vim-textobj-indent'
 Plugin 'altercation/vim-colors-solarized'
@@ -22,7 +21,7 @@ Plugin 'fatih/vim-go'
 call vundle#end()
 filetype plugin indent on
 
-syntax off
+syntax on
 scriptencoding utf-8
 color solarized
 
@@ -92,7 +91,7 @@ autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
 " Go style.
 autocmd FileType go setlocal ts=8 sw=8 sts=8 tw=80 noet
 " Unix style.
-autocmd FileType c,cpp,sh,make,zsh setlocal ts=8 sw=8 sts=8 tw=80 noet cin fo=tcqlron cino=:0,l1,t0,g0,(s,m1,j1,J1
+autocmd FileType c,cpp,sh,make,zsh,gitconfig setlocal ts=8 sw=8 sts=8 tw=80 noet cin fo=tcqlron cino=:0,l1,t0,g0,(s,m1,j1,J1
 
 " EasyMotion
 " Disable default mappings.

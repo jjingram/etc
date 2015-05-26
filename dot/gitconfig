@@ -1,3 +1,10 @@
+[alias]
+	l = log --pretty=oneline --graph --abbrev-commit
+        s = status -s
+	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+	p = !"git pull; git submodule foreach git pull origin master"
+	c = clone --recursive
+	ca = !git add -A && git commit -av
 [user]
 	email = jarrod.jeffi@gmail.com
 	name = Jarrod Jeffrey Ingram
@@ -11,3 +18,5 @@
 	default = simple
 [core]
 	editor = /usr/local/bin/mvim -v
+        excludesfile = ~/.gitignore
+	attributesfile = ~/.gitattributes

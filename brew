@@ -8,5 +8,5 @@ reattach-to-user-namespace
 tmux
 postgresql
 go
-gtk+
 valgrind --HEAD
+gdb
