@@ -46,7 +46,7 @@ DISABLE_AUTO_TITLE="true"
 ZSH_CUSTOM=$HOME/etc/zsh
 
 # Automatically start a tmux session upon logging in.
-ZSH_TMUX_AUTOSTART=true
+#ZSH_TMUX_AUTOSTART=true
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -74,7 +74,7 @@ export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 # TexLive
 PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-darwin
@@ -83,5 +83,5 @@ PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-darwin
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
 
-# XQuartz
-export PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig
+# Cabal
+export PATH=$PATH:$HOME/.cabal/bin

@@ -14,8 +14,9 @@ Plugin 'kana/vim-textobj-user'
 Plugin 'kana/vim-textobj-indent'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'Lokaltog/vim-easymotion'
-Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'scrooloose/syntastic'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'benmills/vimux'
 Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'fatih/vim-go'
 call vundle#end()
@@ -51,9 +52,10 @@ if has('persistent_undo')
     set undofile undolevels=1000 undoreload=10000
 endif
 
-set guifont=Monaco:h15
+set guifont=Menlo:h15
 set guioptions-=rL
 
+let mapleader=' '
 " Easier horizontal shifting.
 map zl zL
 map zh zH
@@ -82,7 +84,7 @@ command! W w !sudo tee % > /dev/null
 autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml,perl,lua
             \ autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 " Modula2, really?
-autocmd BufRead,BufNewFile *.md setlocal filetype=markdown spell
+autocmd BufRead,BufNewFile *.md setlocal filetype=markdown spell textwidth=80
 " Automatically switch to the current file directory when a new buffer is
 " opened.
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
@@ -100,10 +102,14 @@ let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 " Bi-directional find motion, jump to anywhere you want with minimal
 " keystrokes, with just one key binding: `<space>{char}{label}`.
-nmap <space> <plug>(easymotion-s)
+nmap <leader><space> <plug>(easymotion-s)
 
 " Syntastic
 let g:syntastic_cpp_compiler_options='-std=c++11'
+
+" Vimux
+let g:VimuxHeight = "50"
+let g:VimuxOrientation = "h"
 
 " Setup directories for backup, view and swap files under ~/.vim/.
 function! InitializeDirectories()

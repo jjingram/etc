@@ -1,6 +1,6 @@
 bind f:alt move screenOriginX;screenOriginY screenSizeX;screenSizeY
 
-bind q:alt focus 'iTerm'
+bind q:alt focus 'Emacs'
 bind w:alt focus 'Google Chrome'
 bind e:alt focus 'Finder'
 bind r:alt focus 'Preview'

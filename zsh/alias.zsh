@@ -6,5 +6,3 @@ if [ $(uname) = 'Darwin' ]; then
 	export EDITOR='mvim -v'
 fi
 alias e=$EDITOR
-
-alias map='xargs -n1'

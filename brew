@@ -10,3 +10,7 @@ postgresql
 go
 valgrind --HEAD
 gdb
+python3
+trash
+ghc
+cabal-install
