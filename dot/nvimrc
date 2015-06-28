@@ -1,47 +1,30 @@
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/vundle
-call vundle#begin()
+set rtp+=~/.nvim/bundle/vundle
+call vundle#begin('~/.nvim/bundle/')
 Plugin 'gmarik/vundle'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-abolish'
-Plugin 'tpope/vim-vinegar'
-Plugin 'tpope/vim-endwise'
-Plugin 'kana/vim-textobj-user'
-Plugin 'kana/vim-textobj-indent'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'scrooloose/syntastic'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'benmills/vimux'
-Plugin 'hynek/vim-python-pep8-indent'
-Plugin 'fatih/vim-go'
-Plugin 'lukerandall/haskellmode-vim'
+Plugin 'chriskempson/base16-vim'
 call vundle#end()
-filetype plugin indent on
 
+filetype plugin indent on
 syntax on
 scriptencoding utf-8
-color solarized
-
-runtime macros/matchit.vim
-runtime ftplugin/man.vim
+set background=light
+let base16colorspace=256 
+colorscheme base16-google
 
 set autoindent
 set autoread
 set backspace=indent,eol,start whichwrap=b,s,h,l,<,>,[,] nowrap
 set clipboard=unnamed
-set laststatus=2 ruler showcmd
 set encoding=utf-8
 set nojoinspaces
-set ignorecase incsearch hlsearch smartcase
 set hidden
 set history=1000
+set ignorecase incsearch hlsearch smartcase
+set laststatus=2 ruler showcmd
 set scrolloff=1
-set shortmess+=filmnrxoOtT
+set shortmess+=IfilmnrxoOtT
 set expandtab shiftwidth=4 softtabstop=4 tabstop=8
 set mouse=a mousehide
 set noerrorbells visualbell t_vb=
@@ -49,12 +32,10 @@ set winminheight=0
 set backup
 set completeopt=menu,longest
 set wildmenu
+set splitright
 if has('persistent_undo')
     set undofile undolevels=1000 undoreload=10000
 endif
-
-set guifont=Menlo:h15
-set guioptions-=rL
 
 let mapleader=' '
 " Easier horizontal shifting.
@@ -63,8 +44,6 @@ map zh zH
 " Wrapped lines goes down/up to next row, rather than next line in file.
 nnoremap j gj
 nnoremap k gk
-" Use Vim for displaying man pages.
-nnoremap <silent> K :<c-u>exe "Man" v:count "<c-r><c-w>"<cr>
 " Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
 " Shift without exiting visual mode.
@@ -76,10 +55,15 @@ map <silent> <leader>/ :nohlsearch<cr>
 map <silent> <leader>p :set paste!<cr>
 " Source vim configuration.
 map <silent> <leader>v :source $HOME/.vimrc<cr>
-" Fast saving
-nmap <leader>w :w!<cr>
-
-command! W w !sudo tee % > /dev/null
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
+tnoremap <c-h> <c-\><c-n><c-w>h
+tnoremap <c-j> <c-\><c-n><c-w>j
+tnoremap <c-k> <c-\><c-n><c-w>k
+tnoremap <c-l> <c-\><c-n><c-w>l
+tnoremap <c-w> <c-\><c-n><c-w>
 
 " Only strip trailing whitespace for certain file types.
 autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml,perl,lua
@@ -96,26 +80,10 @@ autocmd FileType go setlocal ts=8 sw=8 sts=8 tw=80 noet
 " Unix style.
 autocmd FileType c,cpp,sh,make,zsh,gitconfig setlocal ts=8 sw=8 sts=8 tw=80 noet cin fo=tcqlron cino=:0,l1,t0,g0,(s,m1,j1,J1
 
-" EasyMotion
-" Disable default mappings.
-let g:EasyMotion_do_mapping = 0
-" Turn on the case sensitive feature.
-let g:EasyMotion_smartcase = 1
-" Bi-directional find motion, jump to anywhere you want with minimal
-" keystrokes, with just one key binding: `<space>{char}{label}`.
-nmap <leader><space> <plug>(easymotion-s)
-
-" Syntastic
-let g:syntastic_cpp_compiler_options='-std=c++11'
-
-" Vimux
-let g:VimuxHeight = "50"
-let g:VimuxOrientation = "h"
-
 " Setup directories for backup, view and swap files under ~/.vim/.
 function! InitializeDirectories()
     let parent = $HOME
-    let prefix = 'vim/'
+    let prefix = 'nvim/'
     let dir_list = {
                 \ 'backup': 'backupdir',
                 \ 'views': 'viewdir',
@@ -154,20 +122,3 @@ function! StripTrailingWhitespace()
     let @/=_s
     call cursor(l, c)
 endfunction
-
-function! s:RunShellCommand(cmdline)
-    botright new
-    setlocal buftype=nofile
-    setlocal bufhidden=delete
-    setlocal nobuflisted
-    setlocal noswapfile
-    setlocal nowrap
-    setlocal filetype=shell
-    setlocal syntax=shell
-    call setline(1, a:cmdline)
-    call setline(2, substitute(a:cmdline, '.', '=', 'g'))
-    execute 'silent $read !' . escape(a:cmdline, '%#')
-    setlocal nomodifiable
-    1
-endfunction
-command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)

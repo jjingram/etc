@@ -1,11 +1,13 @@
+# GNU Readline library documentation: https://cnswww.cns.cwru.edu/php/chet/readline/readline.html
 set bell-style none
 set colored-stats on
 set completion-ignore-case on
+set convert-meta off
 set editing-mode vi
 set mark-symlinked-directories on
 set show-mode-in-prompt on
 set visible-stats on
 
 set keymap vi-command
-"k": history-search-backward
-"j": history-search-forward
+"\C-p": history-search-backward
+"\C-n": history-search-forward

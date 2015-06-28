@@ -1,44 +1,61 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+sudo -v
 
 # Get the path of the directory in which the script is loacted.
 SOURCE="${BASH_SOURCE[0]}"
 # Resolve $SOURCE until the file is no longer a symlink.
 while [ -h "$SOURCE" ]; do
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  SOURCE="$(readlink "$SOURCE")"
-  # If $SOURCE was a relative symlink we need to resolve it relative to the path
-  # where the symlink file was located.
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+	DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+	SOURCE="$(readlink "$SOURCE")"
+	# If $SOURCE was a relative symlink we need to resolve it relative to
+	# the path where the symlink file was located.
+	[[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+# Setup OS X defaults.
+$DIR/osx
 
 # Install homebrew and install packages.
 which brew > /dev/null
 if [[ $? -ne 0 ]]; then
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
+brew tap $(paste -s $DIR/tap)
 brew install $(paste -s $DIR/brew)
 brew cask install $(paste -s $DIR/cask)
 
-# Setup zsh.
-if [[ ! -d $HOME/.oh-my-zsh ]]; then
-  curl -L http://install.ohmyz.sh | sh
-fi
-
 # Link dot files.
 for i in $(ls $DIR/dot); do
-  if [ ! -L "$HOME/.$i" ]; then
-    echo "Linking $DIR/dot/ to $HOME/.$i"
-    ln -sf "$DIR/dot/$i" "$HOME/.$i"
-  fi
+	if [ ! -L "$HOME/.$i" ]; then
+		echo "Linking $DIR/dot/$i to $HOME/.$i"
+		ln -sf "$DIR/dot/$i" "$HOME/.$i"
+	fi
 done
 
-# Setup Vim.
-[[ ! -d $HOME/.vim/bundle ]] && mkdir -p $HOME/.vim/bundle
-if [ ! -d $HOME/.vim/bundle/vundle ]; then
-  git clone https://github.com/gmarik/vundle $HOME/.vim/bundle/vundle
+# Setup fish.
+FISH="$HOME/.config/fish"
+[[ ! -d $FISH ]] && mkdir -p "$FISH"
+[[ ! -d $FISH/functions ]] && mkdir -p "$FISH/functions"
+if [ ! -L "$FISH/config.fish" ]; then
+	echo "Linking $DIR/fish/config.fish to $FISH/config.fish"
+	ln -sf "$DIR/fish/config.fish" "$FISH/config.fish"
 fi
-vim +PluginInstall +qall
+for i in $(ls "$DIR/fish/functions"); do
+	if [ ! -L "$FISH/functions/$i" ]; then
+		echo "Linking $DIR/fish/functions/$i to $FISH/functions/$i"
+		ln -sf "$DIR/fish/functions/$i" "$FISH/functions/$i"
+	fi
+done
 
-# Setup Haskell.
-cabal install $(paste -s $DIR/cabal)
+# Setup NeoVim.
+if [ ! -d $HOME/.nvim/bundle/vundle ]; then
+	git clone https://github.com/gmarik/vundle $HOME/.nvim/bundle/vundle
+fi
+env SHELL=$(which sh) nvim +PluginInstall! +PluginClean +qall
+
+# Fix <c-h> by fixing terminfo.
+infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
+tic $TERM.ti
+rm $TERM.ti
