@@ -1,4 +1,11 @@
+set bell-style none
+set colored-stats on
+set completion-ignore-case on
 set editing-mode vi
+set mark-symlinked-directories on
+set show-mode-in-prompt on
+set visible-stats on
+
 set keymap vi-command
 "k": history-search-backward
 "j": history-search-forward
