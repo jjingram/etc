@@ -1,17 +1,37 @@
 set nocompatible
-filetype off
-set rtp+=~/.nvim/bundle/vundle
-call vundle#begin('~/.nvim/bundle/')
-Plugin 'gmarik/vundle'
-Plugin 'chriskempson/base16-vim'
-call vundle#end()
+
+if &shell =~# 'fish$'
+    set shell=sh
+endif
+
+runtime macros/matchit.vim
+runtime ftplugin/man.vim
+
+call plug#begin('~/.vim/bundle')
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-fugitive'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-indent'
+Plug 'kien/ctrlp.vim'
+Plug 'scrooloose/syntastic'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'plasticboy/vim-markdown'
+Plug 'hynek/vim-python-pep8-indent'
+Plug 'fatih/vim-go'
+Plug 'aliva/vim-fish'
+Plug 'travitch/hasksyn'
+Plug 'eagletmt/ghcmod-vim'
+call plug#end()
 
 filetype plugin indent on
 syntax on
 scriptencoding utf-8
 set background=light
-let base16colorspace=256 
-colorscheme base16-google
 
 set autoindent
 set autoread
@@ -33,6 +53,7 @@ set backup
 set completeopt=menu,longest
 set wildmenu
 set splitright
+set shell=bash
 if has('persistent_undo')
     set undofile undolevels=1000 undoreload=10000
 endif
@@ -41,6 +62,8 @@ let mapleader=' '
 " Easier horizontal shifting.
 map zl zL
 map zh zH
+" Kill Ex mode.
+nnoremap Q <nop>
 " Wrapped lines goes down/up to next row, rather than next line in file.
 nnoremap j gj
 nnoremap k gk
@@ -53,37 +76,30 @@ vnoremap > >gv
 map <silent> <leader>/ :nohlsearch<cr>
 " Toggle paste mode.
 map <silent> <leader>p :set paste!<cr>
-" Source vim configuration.
-map <silent> <leader>v :source $HOME/.vimrc<cr>
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
-tnoremap <c-h> <c-\><c-n><c-w>h
-tnoremap <c-j> <c-\><c-n><c-w>j
-tnoremap <c-k> <c-\><c-n><c-w>k
-tnoremap <c-l> <c-\><c-n><c-w>l
-tnoremap <c-w> <c-\><c-n><c-w>
 
-" Only strip trailing whitespace for certain file types.
-autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml,perl,lua
-            \ autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+" Strip trailing whitespace on save.
+autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+" Highlight characters beyond 80 columns.
+autocmd BufWinEnter,WinEnter <buffer> let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
 " Modula2, really?
 autocmd BufRead,BufNewFile *.md setlocal filetype=markdown spell textwidth=80
 " Automatically switch to the current file directory when a new buffer is
 " opened.
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
-" Highlight characters beyond 80 columns.
-autocmd BufWinEnter,WinEnter * let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
 " Go style.
 autocmd FileType go setlocal ts=8 sw=8 sts=8 tw=80 noet
 " Unix style.
-autocmd FileType c,cpp,sh,make,zsh,gitconfig setlocal ts=8 sw=8 sts=8 tw=80 noet cin fo=tcqlron cino=:0,l1,t0,g0,(s,m1,j1,J1
+autocmd FileType c,cpp,sh,make,zsh,gitconfig
+            \ setlocal ts=8 sw=8 sts=8 tw=80 noet cin fo=tcqlron cino=:0,l1,t0,g0,(s,m1,j1,J1
 
 " Setup directories for backup, view and swap files under ~/.vim/.
 function! InitializeDirectories()
     let parent = $HOME
-    let prefix = 'nvim/'
+    let prefix = 'vim/'
     let dir_list = {
                 \ 'backup': 'backupdir',
                 \ 'views': 'viewdir',
@@ -122,3 +138,4 @@ function! StripTrailingWhitespace()
     let @/=_s
     call cursor(l, c)
 endfunction
+

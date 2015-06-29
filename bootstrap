@@ -22,7 +22,6 @@ which brew > /dev/null
 if [[ $? -ne 0 ]]; then
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
-brew tap $(paste -s $DIR/tap)
 brew install $(paste -s $DIR/brew)
 brew cask install $(paste -s $DIR/cask)
 
@@ -37,25 +36,16 @@ done
 # Setup fish.
 FISH="$HOME/.config/fish"
 [[ ! -d $FISH ]] && mkdir -p "$FISH"
-[[ ! -d $FISH/functions ]] && mkdir -p "$FISH/functions"
-if [ ! -L "$FISH/config.fish" ]; then
-	echo "Linking $DIR/fish/config.fish to $FISH/config.fish"
-	ln -sf "$DIR/fish/config.fish" "$FISH/config.fish"
-fi
-for i in $(ls "$DIR/fish/functions"); do
-	if [ ! -L "$FISH/functions/$i" ]; then
-		echo "Linking $DIR/fish/functions/$i to $FISH/functions/$i"
-		ln -sf "$DIR/fish/functions/$i" "$FISH/functions/$i"
+for i in $(ls "$DIR/fish"); do
+	if [ ! -L "$FISH/$i" ]; then
+		echo "Linking $DIR/fish/$i to $FISH/$i"
+		ln -sf "$DIR/fish/$i" "$FISH/$i"
 	fi
 done
 
-# Setup NeoVim.
-if [ ! -d $HOME/.nvim/bundle/vundle ]; then
-	git clone https://github.com/gmarik/vundle $HOME/.nvim/bundle/vundle
+# Setup Vim.
+if [ ! -f $HOME/.vim/autoload/plug.vim ]; then
+	curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
-env SHELL=$(which sh) nvim +PluginInstall! +PluginClean +qall
-
-# Fix <c-h> by fixing terminfo.
-infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
-tic $TERM.ti
-rm $TERM.ti
+mvim -v +PlugInstall +PluginClean! +qall

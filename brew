@@ -1,18 +1,17 @@
 caskroom/cask/brew-cask
-bash
-bash-completion
+fish
 git
+macvim
+tmux
 ctags
 p7zip
 the_silver_searcher
 reattach-to-user-namespace
-tmux
+trash
+
 postgresql
 go
 gdb
 python3
-trash
 ghc
 cabal-install
-
---HEAD neovim
