@@ -6,7 +6,7 @@ function fish_mode_prompt --description 'Displays the current mode'
                 set_color red
                 echo ':'
             case insert
-                set_color green
+                set_color blue
                 echo '+'
             case visual
                 set_color magenta

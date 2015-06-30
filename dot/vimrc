@@ -1,13 +1,7 @@
 set nocompatible
 
-if &shell =~# 'fish$'
-    set shell=sh
-endif
-
-runtime macros/matchit.vim
-runtime ftplugin/man.vim
-
 call plug#begin('~/.vim/bundle')
+Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
@@ -15,45 +9,35 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-indent'
-Plug 'kien/ctrlp.vim'
+Plug 'tpope/vim-commentary'
+Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-indent'
+Plug 'altercation/vim-colors-solarized'
+Plug 'Shougo/unite.vim' | Plug 'Shougo/neomru.vim'
 Plug 'scrooloose/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'plasticboy/vim-markdown'
-Plug 'hynek/vim-python-pep8-indent'
-Plug 'fatih/vim-go'
-Plug 'aliva/vim-fish'
-Plug 'travitch/hasksyn'
-Plug 'eagletmt/ghcmod-vim'
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+Plug 'dag/vim-fish', { 'for': 'fish' }
+Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
+Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
 call plug#end()
 
-filetype plugin indent on
-syntax on
-scriptencoding utf-8
 set background=light
+colorscheme solarized
 
-set autoindent
-set autoread
-set backspace=indent,eol,start whichwrap=b,s,h,l,<,>,[,] nowrap
+set textwidth=79
 set clipboard=unnamed
-set encoding=utf-8
 set nojoinspaces
 set hidden
-set history=1000
-set ignorecase incsearch hlsearch smartcase
-set laststatus=2 ruler showcmd
-set scrolloff=1
-set shortmess+=IfilmnrxoOtT
-set expandtab shiftwidth=4 softtabstop=4 tabstop=8
+set ignorecase hlsearch smartcase
+set shortmess+=aoOstTI
+set expandtab tabstop=4 shiftwidth=0 softtabstop=-1
 set mouse=a mousehide
 set noerrorbells visualbell t_vb=
-set winminheight=0
-set backup
 set completeopt=menu,longest
-set wildmenu
+set winminheight=0
 set splitright
-set shell=bash
+set backup
 if has('persistent_undo')
     set undofile undolevels=1000 undoreload=10000
 endif
@@ -72,29 +56,50 @@ nnoremap Y y$
 " Shift without exiting visual mode.
 vnoremap < <gv
 vnoremap > >gv
-" Stop highlighting after a search.
-map <silent> <leader>/ :nohlsearch<cr>
-" Toggle paste mode.
-map <silent> <leader>p :set paste!<cr>
+" Quick window switching and rolodex for horizontal splits.
 nnoremap <c-h> <c-w>h
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
+nnoremap <c-j> <c-w>j<c-w>_
+nnoremap <c-k> <c-w>k<c-w>_
 nnoremap <c-l> <c-w>l
+" Clear search highlighting.
+nnoremap <silent> <leader>/ :nohlsearch<cr>
+" Toggle paste mode.
+nnoremap <silent> <leader>p :set paste!<cr>
+" Unite
+nnoremap <silent> <leader>e :Unite -start-insert buffer neomru/file file<cr>
 
 " Strip trailing whitespace on save.
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 " Highlight characters beyond 80 columns.
-autocmd BufWinEnter,WinEnter <buffer> let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
-" Modula2, really?
-autocmd BufRead,BufNewFile *.md setlocal filetype=markdown spell textwidth=80
+autocmd BufWinEnter,WinEnter <buffer>
+            \ let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
 " Automatically switch to the current file directory when a new buffer is
 " opened.
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
-" Go style.
-autocmd FileType go setlocal ts=8 sw=8 sts=8 tw=80 noet
-" Unix style.
-autocmd FileType c,cpp,sh,make,zsh,gitconfig
-            \ setlocal ts=8 sw=8 sts=8 tw=80 noet cin fo=tcqlron cino=:0,l1,t0,g0,(s,m1,j1,J1
+" Markdown.
+autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell
+" Go.
+autocmd FileType go setlocal ts=8 noet
+" Unix.
+autocmd FileType c,cpp,sh,make setlocal ts=8 noet
+autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
+" Haskell.
+autocmd FileType haskell setlocal ts=2
+
+" Syntastic.
+let g:syntastic_always_populate_loc_list = 1
+
+function! StripTrailingWhitespace()
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Let's do this!
+    %s/\s\+$//e
+    " Cleanup: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction
 
 " Setup directories for backup, view and swap files under ~/.vim/.
 function! InitializeDirectories()
@@ -126,16 +131,4 @@ function! InitializeDirectories()
     endfor
 endfunction
 call InitializeDirectories()
-
-function! StripTrailingWhitespace()
-    " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Let's do this!
-    %s/\s\+$//e
-    " Cleanup: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
-endfunction
 

@@ -49,3 +49,7 @@ if [ ! -f $HOME/.vim/autoload/plug.vim ]; then
 		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 mvim -v +PlugInstall +PluginClean! +qall
+
+# Setup Haskell.
+cabal update
+cabal install $(paste -s $DIR/cabal)

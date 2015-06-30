@@ -13,5 +13,3 @@ postgresql
 go
 gdb
 python3
-ghc
-cabal-install
