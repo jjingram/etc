@@ -10,9 +10,14 @@ Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
-Plug 'kana/vim-textobj-user' | Plug 'kana/vim-textobj-indent'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/neomru.vim'
+Plug 'Shougo/neocomplete.vim'
+Plug 'Shougo/neco-vim'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-indent'
 Plug 'altercation/vim-colors-solarized'
-Plug 'Shougo/unite.vim' | Plug 'Shougo/neomru.vim'
 Plug 'scrooloose/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
@@ -20,6 +25,9 @@ Plug 'dag/vim-fish', { 'for': 'fish' }
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
+Plug 'Twinside/vim-hoogle'
+Plug 'eagletmt/ghcmod-vim'
+Plug 'eagletmt/neco-ghc'
 call plug#end()
 
 set background=light
@@ -56,17 +64,12 @@ nnoremap Y y$
 " Shift without exiting visual mode.
 vnoremap < <gv
 vnoremap > >gv
-" Quick window switching and rolodex for horizontal splits.
-nnoremap <c-h> <c-w>h
-nnoremap <c-j> <c-w>j<c-w>_
-nnoremap <c-k> <c-w>k<c-w>_
-nnoremap <c-l> <c-w>l
 " Clear search highlighting.
 nnoremap <silent> <leader>/ :nohlsearch<cr>
-" Toggle paste mode.
-nnoremap <silent> <leader>p :set paste!<cr>
-" Unite
+" Unite.
 nnoremap <silent> <leader>e :Unite -start-insert buffer neomru/file file<cr>
+" Git status.
+nnoremap <silent> <leader>g :Gstatus<cr>
 
 " Strip trailing whitespace on save.
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
@@ -86,8 +89,20 @@ autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
 " Haskell.
 autocmd FileType haskell setlocal ts=2
 
-" Syntastic.
 let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" Manually create key mappings (to avoid rebinding C-\).
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+
+let g:neocomplete#enable_at_startup = 1
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 function! StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.

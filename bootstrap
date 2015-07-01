@@ -22,8 +22,8 @@ which brew > /dev/null
 if [[ $? -ne 0 ]]; then
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
-brew install $(paste -s $DIR/brew)
-brew cask install $(paste -s $DIR/cask)
+cat $DIR/pkg/brew | xargs -L 1 brew install
+cat $DIR/pkg/cask | xargs -L 1 brew cask install
 
 # Link dot files.
 for i in $(ls $DIR/dot); do
@@ -50,4 +50,4 @@ mvim -v +PlugInstall +PluginClean! +qall
 # Setup Haskell.
 cabal update
 cabal install alex happy
-#cabal install yi --extra-lib-dirs=/usr/local/opt/icu4c/lib --extra-include-dirs=/usr/local/opt/icu4c/include
+cabal install $(paste -s "$DIR/pkg/cabal")
