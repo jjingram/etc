@@ -6,13 +6,13 @@ sudo -v
 SOURCE="${BASH_SOURCE[0]}"
 # Resolve $SOURCE until the file is no longer a symlink.
 while [ -h "$SOURCE" ]; do
-	DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+	DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 	SOURCE="$(readlink "$SOURCE")"
 	# If $SOURCE was a relative symlink we need to resolve it relative to
 	# the path where the symlink file was located.
 	[[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 
 # Setup OS X defaults.
 $DIR/osx
@@ -27,29 +27,27 @@ brew cask install $(paste -s $DIR/cask)
 
 # Link dot files.
 for i in $(ls $DIR/dot); do
-	if [ ! -L "$HOME/.$i" ]; then
-		echo "Linking $DIR/dot/$i to $HOME/.$i"
-		ln -sf "$DIR/dot/$i" "$HOME/.$i"
-	fi
+	echo "Linking $DIR/dot/$i to $HOME/.$i"
+	ln -sf "$DIR/dot/$i" "$HOME/.$i"
 done
 
-# Setup fish.
-FISH="$HOME/.config/fish"
-[[ ! -d $FISH ]] && mkdir -p "$FISH"
-for i in $(ls "$DIR/fish"); do
-	if [ ! -L "$FISH/$i" ]; then
-		echo "Linking $DIR/fish/$i to $FISH/$i"
-		ln -sf "$DIR/fish/$i" "$FISH/$i"
-	fi
+# Link config files.
+SRC_DIR="$DIR/config"
+DST_DIR="$HOME/.config"
+for i in $(ls "$SRC_DIR"); do
+	mkdir -p "$DST_DIR/$i"
+	for j in $(ls "$SRC_DIR/$i"); do
+		echo "$SRC_DIR/$i/$j to $DST_DIR/$i/$j"
+		ln -sfh "$SRC_DIR/$i/$j" "$DST_DIR/$i/$j"
+	done
 done
 
 # Setup Vim.
-if [ ! -f $HOME/.vim/autoload/plug.vim ]; then
-	curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 mvim -v +PlugInstall +PluginClean! +qall
 
 # Setup Haskell.
 cabal update
-cabal install $(paste -s $DIR/cabal)
+cabal install alex happy
+#cabal install yi --extra-lib-dirs=/usr/local/opt/icu4c/lib --extra-include-dirs=/usr/local/opt/icu4c/include

@@ -8,8 +8,8 @@ p7zip
 the_silver_searcher
 reattach-to-user-namespace
 trash
-
 postgresql
 go
 gdb
 python3
+ghc cabal-install icu4c
