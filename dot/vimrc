@@ -8,28 +8,21 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/neomru.vim'
-Plug 'Shougo/neocomplete.vim'
-Plug 'Shougo/neco-vim'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
 Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-Plug 'RobertAudi/fish.vim'
+Plug 'RobertAudi/fish.vim', { 'for': 'fish' }
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
-Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 call plug#end()
 
+syntax off
 set background=light
 colorscheme solarized
 
@@ -54,8 +47,10 @@ let mapleader=' '
 " Easier horizontal shifting.
 map zl zL
 map zh zH
-" Kill Ex mode.
-nnoremap Q <nop>
+" NOTE: The "Q" command formerly performed this function.  If you still want to
+" use "Q" for formatting, use these mappings:
+nnoremap Q gq
+vnoremap Q gq
 " Wrapped lines goes down/up to next row, rather than next line in file.
 nnoremap j gj
 nnoremap k gk
@@ -64,12 +59,8 @@ nnoremap Y y$
 " Shift without exiting visual mode.
 vnoremap < <gv
 vnoremap > >gv
-" Clear search highlighting.
-nnoremap <silent> <leader>/ :nohlsearch<cr>
-" Unite.
-nnoremap <silent> <leader>e :Unite -start-insert buffer neomru/file file<cr>
-" Git status.
-nnoremap <silent> <leader>g :Gstatus<cr>
+" Clear search highlighting. Vim registers <c-/> as <c-_>.
+nnoremap <silent> <c-_> :nohlsearch<cr>
 
 " Strip trailing whitespace on save.
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
@@ -86,23 +77,14 @@ autocmd FileType go setlocal ts=8 noet
 " Unix.
 autocmd FileType c,cpp,sh,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
-" Haskell.
-autocmd FileType haskell setlocal ts=2
+" Just autoindent is good enough for Haskell.
+autocmd FileType haskell setlocal ts=2 indentexpr=
 
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-" Manually create key mappings (to avoid rebinding C-\).
-let g:tmux_navigator_no_mappings = 1
-nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
-nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
-nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-
-let g:neocomplete#enable_at_startup = 1
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+let g:hindent_style = 'chris-done'
 
 function! StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.
