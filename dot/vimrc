@@ -21,13 +21,13 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-Plug 'dag/vim-fish', { 'for': 'fish' }
+Plug 'RobertAudi/fish.vim'
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
-Plug 'Twinside/vim-hoogle'
-Plug 'eagletmt/ghcmod-vim'
-Plug 'eagletmt/neco-ghc'
+Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
+Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 call plug#end()
 
 set background=light
