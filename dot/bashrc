@@ -1,0 +1,46 @@
+# Prompt
+PS1=' \w '
+
+LSCOLORS=gxfxbEaEBxxEhEhBaDaCaD
+
+# For setting history length see HISTSIZE in bash(1).
+HISTSIZE=-1
+# Don't put duplicate lines or lines starting with space in the history.
+HISTCONTROL=ignoreboth
+# Append to the history file, don't overwrite it.
+shopt -s histappend
+# History substitutions aren't immediately passed to the shell parser. Useful
+# with !!, !n, !-n, !string, !?string, ^string1^string2
+shopt -s histverify
+
+# Automatically prepend `cd' when entering just a path.
+shopt -s autocd
+# Automatically `ls' after `cd' to a new directory.
+PROMPT_COMMAND='[[ ${__new_wd:=$PWD} != $PWD ]] && ls; __new_wd=$PWD'
+
+alias l='ls'
+alias ls='ls -hFG'
+alias la='ls -A'
+alias ll='ls -l'
+alias lr='ls -R'
+
+alias q='exit'
+alias c='clear'
+alias l='ls'
+
+export EDITOR='vim'
+alias e='$EDITOR'
+
+# Enable bash completion.
+if [[ -f /usr/local/etc/bash_completion ]]; then
+	. /usr/local/etc/bash_completion
+fi
+
+# Go.
+export GOPATH=$HOME/go
+PATH=$PATH:$GOPATH/bin
+# Haskell.
+PATH=$PATH:$HOME/.cabal/bin
+export PATH
+
+[[ -z $TMUX ]] && exec tmux

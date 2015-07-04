@@ -14,6 +14,7 @@ Plug 'kana/vim-textobj-indent'
 Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'RobertAudi/fish.vim', { 'for': 'fish' }
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
@@ -23,17 +24,15 @@ Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 call plug#end()
 
 " !sensible.vim
-let g:syntax_on = 1
-syntax off
-set laststatus=0
-set noruler
-set noshowcmd
+autocmd VimEnter * set laststatus=1 noruler noshowcmd
 
 set background=light
-colorscheme default
+colorscheme solarized
+hi Comment cterm=italic
 
 set textwidth=79
 set clipboard=unnamed
+set colorcolumn=80
 set nojoinspaces
 set hidden
 set ignorecase hlsearch smartcase
@@ -53,7 +52,7 @@ let mapleader=' '
 " Easier horizontal shifting.
 map zl zL
 map zh zH
-" NOTE: The "Q" command formerly performed this function.  If you still want to
+" NOTE: The "Q" command formerly performed this function. If you still want to
 " use "Q" for formatting, use these mappings:
 nnoremap Q gq
 vnoremap Q gq
@@ -72,19 +71,15 @@ nnoremap <silent> <c-_> :nohlsearch<cr>
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 " Highlight characters beyond 80 columns.
 autocmd BufWinEnter,WinEnter <buffer>
-            \ let w:m2=matchadd('ColorColumn', '\%>80v.\+', -1)
+\ if bufname("") | let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1) | endif
 " Automatically switch to the current file directory when a new buffer is
 " opened.
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
-" Markdown.
 autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell
-" Go.
 autocmd FileType go setlocal ts=8 noet
-" Unix.
 autocmd FileType c,cpp,sh,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
-" Just autoindent is good enough for Haskell.
-autocmd FileType haskell setlocal ts=2 indentexpr=
+autocmd FileType haskell setlocal ts=2
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -109,10 +104,10 @@ function! InitializeDirectories()
     let parent = $HOME
     let prefix = 'vim/'
     let dir_list = {
-                \ 'backup': 'backupdir',
-                \ 'views': 'viewdir',
-                \ 'swap': 'directory',
-                \ }
+    \   'backup': 'backupdir',
+    \   'views': 'viewdir',
+    \   'swap': 'directory',
+    \}
     if has('persistent_undo')
         let dir_list['undo'] = 'undodir'
     endif
@@ -134,3 +129,9 @@ function! InitializeDirectories()
     endfor
 endfunction
 call InitializeDirectories()
+
+function! HiGroup()
+    echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+    \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+    \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
+endfunction
