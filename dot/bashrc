@@ -1,5 +1,5 @@
 # Prompt
-PS1=' \w '
+PS1=' $(if [ $? ]; then echo -e \[\e[32m\]; else echo -e \[\e[31m\]; fi)\w$([[ $PWD != / ]] && echo '/')\[\e[0m\] '
 
 LSCOLORS=gxfxbEaEBxxEhEhBaDaCaD
 
@@ -27,20 +27,10 @@ alias lr='ls -R'
 alias q='exit'
 alias c='clear'
 alias l='ls'
-
-export EDITOR='vim'
+alias j='jobs'
 alias e='$EDITOR'
 
 # Enable bash completion.
 if [[ -f /usr/local/etc/bash_completion ]]; then
 	. /usr/local/etc/bash_completion
 fi
-
-# Go.
-export GOPATH=$HOME/go
-PATH=$PATH:$GOPATH/bin
-# Haskell.
-PATH=$PATH:$HOME/.cabal/bin
-export PATH
-
-[[ -z $TMUX ]] && exec tmux

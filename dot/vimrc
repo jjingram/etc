@@ -11,20 +11,19 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-commentary'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
+Plug 'kien/ctrlp.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'godlygeek/tabular'
+Plug 'ervandew/supertab'
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-Plug 'RobertAudi/fish.vim', { 'for': 'fish' }
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug 'def-lkb/ocp-indent-vim', { 'for': 'ocaml' }
 call plug#end()
-
-" !sensible.vim
-autocmd VimEnter * set laststatus=1 noruler noshowcmd
 
 set background=light
 colorscheme solarized
@@ -33,6 +32,7 @@ hi Comment cterm=italic
 set textwidth=79
 set clipboard=unnamed
 set colorcolumn=80
+set cursorline
 set nojoinspaces
 set hidden
 set ignorecase hlsearch smartcase
@@ -86,6 +86,19 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 let g:hindent_style = 'chris-done'
+
+" OCaml.
+autocmd FileType ocaml set ts=2
+if executable('opam')
+    let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+    if executable('ocamlmerlin') && has('python')
+        execute "set rtp+=" . g:opamshare . "/merlin/vim"
+        let g:syntastic_ocaml_checkers = ['merlin']
+        autocmd FileType ocaml call SuperTabSetDefaultCompletionType("<c-x><c-o>")
+        " Run once.
+        " :execute "helptags " . g:opamshare . "/merlin/vim/doc"
+    endif
+endif
 
 function! StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.

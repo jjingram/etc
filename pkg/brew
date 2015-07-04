@@ -1,5 +1,5 @@
 caskroom/cask/brew-cask
-fish
+bash
 git
 tmux
 ctags
@@ -14,4 +14,4 @@ python3
 ghc cabal-install icu4c
 wget
 macvim --with-cscope --with-lua --override-system-vim
-fsharp
+opam
