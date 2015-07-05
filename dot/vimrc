@@ -23,6 +23,7 @@ Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'def-lkb/ocp-indent-vim', { 'for': 'ocaml' }
+Plug 'fsharp/vim-fsharp', { 'for': 'fsharp', 'do': 'make fsautocomplete' }
 call plug#end()
 
 set background=light
@@ -74,12 +75,12 @@ autocmd BufWinEnter,WinEnter <buffer>
 \ if bufname("") | let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1) | endif
 " Automatically switch to the current file directory when a new buffer is
 " opened.
-autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell
 autocmd FileType go setlocal ts=8 noet
 autocmd FileType c,cpp,sh,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
 autocmd FileType haskell setlocal ts=2
+autocmd FileType fsharp setlocal ts=2
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1

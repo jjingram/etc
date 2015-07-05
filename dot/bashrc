@@ -1,5 +1,5 @@
 # Prompt
-PS1=' $(if [ $? ]; then echo -e \[\e[32m\]; else echo -e \[\e[31m\]; fi)\w$([[ $PWD != / ]] && echo '/')\[\e[0m\] '
+PS1=' $([ $? ] && echo -e \[\e[32m\] || echo -e \[\e[31m\])\w$([[ $PWD != / ]] && echo '/')\[\e[0m\] '
 
 LSCOLORS=gxfxbEaEBxxEhEhBaDaCaD
 
@@ -18,21 +18,33 @@ shopt -s autocd
 # Automatically `ls' after `cd' to a new directory.
 PROMPT_COMMAND='[[ ${__new_wd:=$PWD} != $PWD ]] && ls; __new_wd=$PWD'
 
-alias l='ls'
 alias ls='ls -hFG'
 alias la='ls -A'
 alias ll='ls -l'
 alias lr='ls -R'
-
+# Shortcuts.
+alias l='ls'
 alias q='exit'
 alias c='clear'
 alias l='ls'
 alias j='jobs'
 alias e='$EDITOR'
+alias g='git'
+alias h='history'
+# Maps to just `-'.
+alias -- -='cd -'
+# Get OS X Software Updates, and update Homebrew, opam, and their installed packages
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade --all; brew cleanup; opam update; opam upgrade'
 
-# Enable bash completion.
-if [[ -f /usr/local/etc/bash_completion ]]; then
-	. /usr/local/etc/bash_completion
+# Add tab completion for many Bash commands.
+if which brew > /dev/null && [ -f $(brew --prefix)/etc/bash_completion ]; then
+	. $(brew --prefix)/etc/bash_completion
 fi
 
+# Enable tab completion for `g' by marking it as an alias for `git'.
+if type _git &> /dev/null && [ -f $(brew --prefix)/etc/bash_completion.d/git-completion.bash ]; then
+	complete -o default -o nospace -F _git g
+fi
+
+# Sync shell with OPAM environment variables.
 eval $(opam config env)

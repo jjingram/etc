@@ -1,8 +1,6 @@
-[[ -r ~/.bashrc ]] && . ~/.bashrc
-
 export EDITOR='vim'
 
-export PATH
+export PATH=~/bin:$PATH
 # Go.
 export GOPATH=$HOME/go
 PATH=$PATH:$GOPATH/bin
@@ -11,5 +9,7 @@ PATH=$PATH:$HOME/.cabal/bin
 
 # OPAM configuration
 . /Users/jji/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+
+[[ -r ~/.bashrc ]] && . ~/.bashrc
 
 [[ -z $TMUX ]] && exec tmux

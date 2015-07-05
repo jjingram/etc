@@ -15,3 +15,4 @@ ghc cabal-install icu4c
 wget
 macvim --with-cscope --with-lua --override-system-vim
 opam
+fsharp
