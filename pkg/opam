@@ -1,2 +1,3 @@
 core utop
 merlin ocp-indent
+async yojson core_extended core_bench cohttp async_graphics cryptokit menhir

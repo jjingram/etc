@@ -10,4 +10,9 @@ let () =
 #require "core.top";;
 #require "core.syntax";;
 
-open Core.Std
+open Core.Std;;
+
+(* Custom utop prompt. *)
+#require "lambda-term";;
+UTop.prompt :=
+  fst (React.S.create LTerm_text.(eval [B_fg (LTerm_style.blue); S "λ "]));;
