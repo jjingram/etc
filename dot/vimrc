@@ -9,21 +9,31 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-fugitive'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'kien/ctrlp.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'godlygeek/tabular'
+Plug 'haya14busa/incsearch.vim'
 Plug 'ervandew/supertab'
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
+Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plug 'def-lkb/ocp-indent-vim', { 'for': 'ocaml' }
-Plug 'fsharp/vim-fsharp', { 'for': 'fsharp', 'do': 'make fsautocomplete' }
+Plug 'def-lkb/vimbufsync', { 'for': 'coq' }
+    \| Plug 'the-lambda-church/coquille', {
+        \'for': 'coq',
+        \'branch': 'pathogen-bundle'
+    \}
 call plug#end()
 
 set background=light
@@ -33,13 +43,16 @@ hi Comment cterm=italic
 set textwidth=79
 set clipboard=unnamed
 set colorcolumn=80
-set cursorline
+set nocursorline
 set nojoinspaces
 set hidden
 set ignorecase hlsearch smartcase
 set shortmess+=aoOstTI
 set expandtab tabstop=4 shiftwidth=0 softtabstop=-1
 set mouse=a mousehide
+if &term =~ '^screen'
+    set ttymouse=xterm2
+endif
 set noerrorbells visualbell t_vb=
 set completeopt=menu,longest
 set winminheight=0
@@ -65,8 +78,6 @@ nnoremap Y y$
 " Shift without exiting visual mode.
 vnoremap < <gv
 vnoremap > >gv
-" Clear search highlighting. Vim registers <c-/> as <c-_>.
-nnoremap <silent> <c-_> :nohlsearch<cr>
 
 " Strip trailing whitespace on save.
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
@@ -80,13 +91,32 @@ autocmd FileType go setlocal ts=8 noet
 autocmd FileType c,cpp,sh,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
 autocmd FileType haskell setlocal ts=2
+autocmd FileType haskell call SuperTabSetDefaultCompletionType("<c-x><c-o>")
 autocmd FileType fsharp setlocal ts=2
+
+function! Coq()
+    map <buffer> <silent> <leader>j :CoqNext<cr>
+    map <buffer> <silent> <leader>k :CoqUndo<cr>
+    map <buffer> <silent> <leader>G :CoqToCursor<cr>
+    set tabstop=2
+    hi CheckedByCoq ctermbg=7
+    hi clear SentToCoq
+endfunction
+autocmd FileType coq call Coq()
+
+" :h g:incsearch#auto_nohlsearch
+set hlsearch
+let g:incsearch#auto_nohlsearch = 1
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
-let g:hindent_style = 'chris-done'
 
 " OCaml.
 autocmd FileType ocaml set ts=2
@@ -149,3 +179,15 @@ function! HiGroup()
     \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
     \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
 endfunction
+
+function! ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+
+augroup resCur
+  autocmd!
+  autocmd BufWinEnter * call ResCur()
+augroup END

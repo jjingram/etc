@@ -13,6 +13,6 @@ gdb
 python3
 ghc cabal-install icu4c
 wget
-macvim --with-cscope --with-lua --override-system-vim
+macvim --with-lua --with-luajit --override-system-vim --custom-icons
 opam
 fsharp

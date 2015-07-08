@@ -11,5 +11,3 @@ PATH=$PATH:$HOME/.cabal/bin
 . /Users/jji/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
 
 [[ -r ~/.bashrc ]] && . ~/.bashrc
-
-[[ -z $TMUX ]] && exec tmux
