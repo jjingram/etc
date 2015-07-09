@@ -11,6 +11,7 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-dispatch'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
@@ -21,6 +22,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
 Plug 'ervandew/supertab'
+Plug 'bruno-/vim-man'
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'fatih/vim-go', { 'for': 'go' }
@@ -30,10 +32,10 @@ Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
 Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 Plug 'def-lkb/ocp-indent-vim', { 'for': 'ocaml' }
 Plug 'def-lkb/vimbufsync', { 'for': 'coq' }
-    \| Plug 'the-lambda-church/coquille', {
-        \'for': 'coq',
-        \'branch': 'pathogen-bundle'
-    \}
+    \ | Plug 'the-lambda-church/coquille', {
+        \ 'for': 'coq',
+        \ 'branch': 'pathogen-bundle'
+    \ }
 call plug#end()
 
 set background=light
@@ -68,16 +70,16 @@ map zl zL
 map zh zH
 " NOTE: The "Q" command formerly performed this function. If you still want to
 " use "Q" for formatting, use these mappings:
-nnoremap Q gq
-vnoremap Q gq
+map Q gq
+map Q gq
 " Wrapped lines goes down/up to next row, rather than next line in file.
-nnoremap j gj
-nnoremap k gk
+map j gj
+map k gk
 " Yank from the cursor to the end of the line, to be consistent with C and D.
-nnoremap Y y$
+map Y y$
 " Shift without exiting visual mode.
-vnoremap < <gv
-vnoremap > >gv
+vmap < <gv
+vmap > >gv
 
 " Strip trailing whitespace on save.
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
@@ -107,10 +109,10 @@ autocmd FileType coq call Coq()
 " :h g:incsearch#auto_nohlsearch
 set hlsearch
 let g:incsearch#auto_nohlsearch = 1
-map n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
-map *  <Plug>(incsearch-nohl-*)
-map #  <Plug>(incsearch-nohl-#)
+map n <Plug>(incsearch-nohl-n)
+map N <Plug>(incsearch-nohl-N)
+map * <Plug>(incsearch-nohl-*)
+map # <Plug>(incsearch-nohl-#)
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
@@ -118,14 +120,17 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-" OCaml.
+map K <Plug>(Man)
+
 autocmd FileType ocaml set ts=2
 if executable('opam')
-    let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+    let g:opamshare =
+        \ substitute(system('opam config var share'),'\n$','','''')
     if executable('ocamlmerlin') && has('python')
         execute "set rtp+=" . g:opamshare . "/merlin/vim"
         let g:syntastic_ocaml_checkers = ['merlin']
-        autocmd FileType ocaml call SuperTabSetDefaultCompletionType("<c-x><c-o>")
+        autocmd FileType ocaml
+            \ call SuperTabSetDefaultCompletionType("<c-x><c-o>")
         " Run once.
         " :execute "helptags " . g:opamshare . "/merlin/vim/doc"
     endif

@@ -2,7 +2,7 @@ export EDITOR='vim'
 
 export PATH=~/bin:$PATH
 # Go.
-export GOPATH=$HOME/go
+export GOPATH=$HOME/dev/go
 PATH=$PATH:$GOPATH/bin
 # Haskell.
 PATH=$PATH:$HOME/.cabal/bin
@@ -11,3 +11,5 @@ PATH=$PATH:$HOME/.cabal/bin
 . /Users/jji/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
 
 [[ -r ~/.bashrc ]] && . ~/.bashrc
+
+[[ -z $TMUX ]] && exec tmux

@@ -1,4 +1,5 @@
 caskroom/cask/brew-cask
+macvim --with-lua --with-luajit --override-system-vim --custom-icons
 bash
 git
 tmux
@@ -13,6 +14,5 @@ gdb
 python3
 ghc cabal-install icu4c
 wget
-macvim --with-lua --with-luajit --override-system-vim --custom-icons
 opam
-fsharp
+gist

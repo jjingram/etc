@@ -1,22 +1,37 @@
 [alias]
-	l = log --pretty=oneline --graph --abbrev-commit
-        s = status -s
-	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
-	p = !"git pull; git submodule foreach git pull origin master"
-	c = clone --recursive
-	ca = !git add -A && git commit -av
+ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+l = "!git ls"
+ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+fl = log -u
+s = status -s
+d = diff
+# Pull in remote changes for the current repository and all its submodules.
+p = !"git pull; git submodule foreach git pull origin master"
+# Clone a repository including all submodules.
+c = clone --recursive
+ca = !git add -A && git commit -av
+tags = tag -l
+branches = branch -a
+remotes = remote -v
+amend = commit --amend --reuse-message=HEAD
+
 [user]
-	email = jarrod.jeffi@gmail.com
-	name = Jarrod Jeffrey Ingram
+email = jarrod.jeffi@gmail.com
+name = Jarrod Jeffrey Ingram
+
 [diff]
-	tool = vimdiff
+tool = vimdiff
+
 [merge]
-	tool = vimdiff
+tool = vimdiff
+
 [difftool]
-	prompt = false
+prompt = false
+
 [push]
-	default = simple
+default = simple
+
 [core]
-	editor = /usr/local/bin/mvim -v
-        excludesfile = ~/.gitignore
-	attributesfile = ~/.gitattributes
+editor = /usr/local/bin/mvim -v
+excludesfile = ~/.gitignore
+attributesfile = ~/.gitattributes

@@ -26,3 +26,6 @@ defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
 
 # Don’t display the annoying prompt when quitting iTerm
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false
+
+# Disable auto-correct
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
