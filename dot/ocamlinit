@@ -14,5 +14,6 @@ open Core.Std;;
 
 (* Custom utop prompt. *)
 #require "lambda-term";;
+#require "utop";;
 UTop.prompt :=
   fst (React.S.create LTerm_text.(eval [B_fg (LTerm_style.blue); S "λ "]));;

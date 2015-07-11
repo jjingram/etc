@@ -16,3 +16,4 @@ ghc cabal-install icu4c
 wget
 opam
 gist
+rlwrap

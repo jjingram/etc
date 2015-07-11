@@ -119,6 +119,7 @@ map g# <Plug>(incsearch-nohl-g#)
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_ignore_files = ['\m\.ml[ly]$']
 
 map K <Plug>(Man)
 

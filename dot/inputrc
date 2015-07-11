@@ -1,5 +1,6 @@
 # GNU Readline library documentation: https://cnswww.cns.cwru.edu/php/chet/readline/readline.html
 set bell-style none
+set blink-matching-paren on
 set completion-ignore-case on
 set convert-meta off
 set echo-control-characters off
