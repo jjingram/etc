@@ -13,9 +13,9 @@
     ("marmalade" . "http://marmalade-repo.org/packages/")))
 
 (defparameter my-packages
-  '(evil evil-matchit evil-surround evil-lisp-state evil-leader
-         exec-path-from-shell diminish epl fill-column-indicator ido-ubiquitous
-         color-theme-solarized smex auto-complete flycheck smartparens))
+  '(evil evil-matchit evil-surround evil-lisp-state evil-leader helm
+         helm-descbinds exec-path-from-shell diminish epl company flycheck
+         smartparens magit hydra))
 
 (package-initialize)
 
@@ -77,16 +77,27 @@
               fill-column 80
               sentence-end-double-space nil)
 
+(setq column-number-mode t
+      load-prefer-newer t
+      require-final-newline t)
+
+
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (setq confirm-nonexistent-file-or-buffer nil
       inhibit-startup-message t
       initial-scratch-message ""
-      column-number-mode t
       inhibit-startup-echo-area-message "jji"
       vc-follow-symlinks t
       kill-buffer-query-functions (remq 'process-kill-buffery-query-function
                                         kill-buffer-query-functions))
+
+;; Make <escape> quit as much as possible
+(define-key minibuffer-local-map (kbd "<escape>") 'keyboard-escape-quit)
+(define-key minibuffer-local-ns-map (kbd "<escape>") 'keyboard-escape-quit)
+(define-key minibuffer-local-completion-map (kbd "<escape>") 'keyboard-escape-quit)
+(define-key minibuffer-local-must-match-map (kbd "<escape>") 'keyboard-escape-quit)
+(define-key minibuffer-local-isearch-map (kbd "<escape>") 'keyboard-escape-quit)
 
 (put 'narrow-to-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
@@ -96,9 +107,7 @@
 (put 'dired-find-alternate-file 'disabled nil)
 
 (require 'apropos)
-(setq apropos-do-all t
-      load-prefer-newer t
-      require-final-newline t)
+(setq apropos-do-all t)
 
 (setq eval-expression-print-length nil
       eval-expression-print-level nil)
@@ -112,53 +121,41 @@
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 
-(require 'saveplace)
-(setq save-place t
-      save-place-file (concat user-emacs-directory "places"))
-
-(setq backup-directory-alist `(("." . ,(concat user-emacs-directory
-                                               "backups"))))
+(setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups"))))
 
 (show-paren-mode 1)
 
 (require 'whitespace)
+(diminish 'whitespace-mode)
 (setq whitespace-line-column 80)
 (setq-default whitespace-style '(face indentation empty lines-tail trailing))
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
-(require 'ido)
-(ido-mode 1)
-(ido-everywhere 1)
+(require 'saveplace)
+(setq save-place t
+      save-place-file (concat user-emacs-directory "places"))
 
-(require 'ido-ubiquitous)
-(ido-ubiquitous-mode 1)
-
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-
-(load-theme 'solarized t)
-
+(require 'exec-path-from-shell)
 (exec-path-from-shell-initialize)
 
 (require 'evil)
+(require 'evil-surround)
 (require 'evil-leader)
 (require 'evil-lisp-state)
-(setq evil-motion-state-modes (append evil-emacs-state-modes
-                                      evil-motion-state-modes)
-      evil-emacs-state-modes nil)
 (global-evil-surround-mode 1)
 (global-evil-matchit-mode 1)
 (global-evil-leader-mode 1)
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
-  ":" 'smex
-  "f" 'ido-find-file
-  "b" 'ido-switch-buffer)
+  "u" 'universal-argument
+  "!" 'shell)
+(setq evil-lisp-state-leader-prefix "s")
+(setq evil-esc-delay 0)
 (evil-mode 1)
 
+(require 'undo-tree)
 (setq undo-tree-auto-save-history t
-      undo-tree-history-directory-alist
-      `(("." . ,(concat user-emacs-directory "undo/"))))
+      undo-tree-history-directory-alist `(("." . ,(concat user-emacs-directory "undo/"))))
 (global-undo-tree-mode)
 (diminish 'undo-tree-mode)
 
@@ -167,20 +164,76 @@
 (sp-use-paredit-bindings)
 (diminish 'smartparens-mode)
 
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(ac-config-default)
-(diminish 'auto-complete-mode)
-
 (require 'flycheck)
-(setq flycheck-highlighting-mode nil)
+(setq flycheck-check-syntax-automatically '(save mode-enabled))
+
+(require 'helm)
+(require 'helm-config)
+(require 'helm-command)
+(require 'helm-semantic)
+(require 'helm-imenu)
+(require 'helm-descbinds)
+(helm-descbinds-mode 1)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x b") 'helm-buffers-list)
+(global-set-key (kbd "M-:") 'helm-eval-expression-with-eldoc)
+(global-set-key (kbd "C-h a") 'helm-apropos)
+(define-key evil-ex-map "e " 'helm-find-files)
+(define-key evil-ex-map "b " 'helm-mini)
+(setq helm-M-x-fuzzy-match t
+      helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match t
+      helm-semantic-fuzzy-match t
+      helm-imenu-fuzzy-match t
+      helm-apropos-fuzzy-match t)
+(evil-leader/set-key
+  ":" 'helm-M-x
+  "/" 'helm-occur)
+(defhydra hydra-helm (:hint nil)
+  "
+-- HELM --"
+  ("?" helm-help)
+  ("<escape>" keyboard-escape-quit)
+  ("q" keyboard-escape-quit)
+  ("<SPC>" helm-toggle-visible-mark)
+  ("*" helm-toggle-all-marks)
+  ("<tab>" helm-select-action)
+  ("gg" helm-beginning-of-buffer)
+  ("G" helm-end-of-buffer)
+  ("h" helm-previous-source)
+  ("j" helm-next-line)
+  ("k" helm-previous-line)
+  ("l" helm-next-source)
+  ("C-f" helm-next-page)
+  ("C-b" helm-previous-page)
+  ("C-w" evil-window-map)
+  ("i" nil))
+(define-key helm-map (kbd "<SPC>") 'hydra-helm/body)
+
+(require 'company)
+(require 'company-dabbrev)
+(require 'company-clang)
+(setq company-idle-delay 0.2
+      company-minimum-prefix-length 2
+      company-require-match nil
+      company-dabbrev-ignore-case nil
+      company-dabbrev-downcase nil
+      company-frontends '(company-pseudo-tooltip-frontend)
+      company-clang-prefix-guesser 'company-mode/more-than-prefix-guesser)
+(define-key company-active-map (kbd "C-/") 'company-search-candidates)
+(define-key company-active-map (kbd "C-M-/") 'company-filter-candidates)
+(define-key company-active-map (kbd "C-d") 'company-show-doc-buffer)
+(define-key company-active-map (kbd "C-n") 'company-select-next)
+(define-key company-active-map (kbd "C-p") 'company-select-previous)
+(define-key company-active-map (kbd "C-l") 'company-complete-selection)
+(diminish 'company-mode)
 
 (defun my-emacs-lisp-mode-hook ()
   (eldoc-mode 1)
   (diminish 'eldoc-mode)
   (whitespace-mode)
-  (diminish 'whitespace-mode)
+  (company-mode 1)
   (smartparens-strict-mode 1)
   (flycheck-mode 1))
-
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
