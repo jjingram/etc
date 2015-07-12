@@ -8,13 +8,20 @@
    '(auto-completion
      better-defaults
      emacs-lisp
-     (git :variables
-          git-magit-status-fullscreen t)
+     git
      markdown
+     org
+     (shell :variables
+            shell-default-shell 'eshell
+            shell-default-height 30
+            shell-default-position 'bottom)
      syntax-checking
      version-control
-     (shell :variables
-            shell-default-shell 'eshell))
+     osx
+     vim-empty-lines
+     evil-commentary
+     smex
+     slime)
    dotspacemacs-additional-packages '()
    dotspacemacs-excluded-packages '()
    dotspacemacs-delete-orphan-packages t))
@@ -63,8 +70,15 @@ before layers configuration."
 This function is called at the very end of Spacemacs initialization after
 layers configuration."
   (setq powerline-default-separator nil)
-  (global-vi-tilde-fringe-mode -1)
-  (define-key evil-ex-map "e " 'helm-find-files)
-  (define-key evil-ex-map "b " 'helm-mini)
-  (define-key helm-map (kbd "C-f") 'helm-next-page)
-  (define-key helm-map (kbd "C-b") 'helm-previous-page))
+  (ido-vertical-mode -1)
+  (define-key evil-ex-map "e " 'ido-find-file)
+  (define-key evil-ex-map "b " 'ido-switch-buffer)
+  (evil-leader/set-key "hda" 'helm-apropos)
+  (setq undo-tree-auto-save-history t
+        undo-tree-history-directory-alist
+        `(("." . ,(concat spacemacs-cache-directory "undo/"))))
+  (add-to-list 'display-buffer-alist
+               '(".*"  display-buffer-same-window (reusable-frames . t))))
+
+;; Do not write anything past this comment. This is where Emacs will
+;; auto-generate custom variable definitions.
