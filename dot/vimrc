@@ -1,6 +1,6 @@
 set nocompatible
 
-call plug#begin('~/.vim/bundle')
+call plug#begin('~/.vim/plug')
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -10,11 +10,10 @@ Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-dispatch'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'kien/ctrlp.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/syntastic'
@@ -23,19 +22,17 @@ Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
 Plug 'ervandew/supertab'
 Plug 'bruno-/vim-man'
-Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-Plug 'hynek/vim-python-pep8-indent', { 'for': 'python' }
-Plug 'fatih/vim-go', { 'for': 'go' }
-Plug 'raichoo/haskell-vim', { 'for': 'haskell' }
-Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
-Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
-Plug 'def-lkb/ocp-indent-vim', { 'for': 'ocaml' }
-Plug 'def-lkb/vimbufsync', { 'for': 'coq' }
-    \ | Plug 'the-lambda-church/coquille', {
-        \ 'for': 'coq',
-        \ 'branch': 'pathogen-bundle'
-    \ }
+Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
+Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
+Plug 'fatih/vim-go', {'for': 'go'}
+Plug 'raichoo/haskell-vim', {'for': 'haskell'}
+Plug 'Twinside/vim-hoogle', {'for': 'haskell'}
+Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
+Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
+Plug 'def-lkb/ocp-indent-vim', {'for': 'ocaml'}
+Plug 'kovisoft/slimv', {'for': 'lisp'}
+Plug 'def-lkb/vimbufsync', {'for': 'coq'}
+Plug 'the-lambda-church/coquille', {'for': 'coq', 'branch': 'pathogen-bundle'}
 call plug#end()
 
 set background=light
@@ -65,6 +62,7 @@ if has('persistent_undo')
 endif
 
 let mapleader=' '
+nnoremap ! :!
 " Easier horizontal shifting.
 map zl zL
 map zh zH
@@ -94,7 +92,6 @@ autocmd FileType c,cpp,sh,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
 autocmd FileType haskell setlocal ts=2
 autocmd FileType haskell call SuperTabSetDefaultCompletionType("<c-x><c-o>")
-autocmd FileType fsharp setlocal ts=2
 
 function! Coq()
     map <buffer> <silent> <leader>j :CoqNext<cr>
@@ -125,14 +122,13 @@ map K <Plug>(Man)
 
 autocmd FileType ocaml set ts=2
 if executable('opam')
-    let g:opamshare =
-        \ substitute(system('opam config var share'),'\n$','','''')
+    let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
     if executable('ocamlmerlin') && has('python')
         execute "set rtp+=" . g:opamshare . "/merlin/vim"
         let g:syntastic_ocaml_checkers = ['merlin']
         autocmd FileType ocaml
             \ call SuperTabSetDefaultCompletionType("<c-x><c-o>")
-        " Run once.
+        " Run once:
         " :execute "helptags " . g:opamshare . "/merlin/vim/doc"
     endif
 endif

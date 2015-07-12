@@ -9,6 +9,7 @@ d = diff
 p = !"git pull; git submodule foreach git pull origin master"
 # Clone a repository including all submodules.
 c = clone --recursive
+a = add
 ca = !git add -A && git commit -av
 tags = tag -l
 branches = branch -a
