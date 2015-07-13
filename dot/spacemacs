@@ -3,7 +3,7 @@
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration."
   (setq-default
-   dotspacemacs-configuration-layer-path '()
+   dotspacemacs-configuration-layer-path '("~/etc/spacemacs/")
    dotspacemacs-configuration-layers
    '(auto-completion
      better-defaults
@@ -18,12 +18,10 @@
      syntax-checking
      version-control
      osx
-     vim-empty-lines
      evil-commentary
-     smex
-     slime)
-   dotspacemacs-additional-packages '()
-   dotspacemacs-excluded-packages '()
+     my-slime)
+   dotspacemacs-additional-packages '(slime-company)
+   dotspacemacs-excluded-packages '(vi-tilde-fringe)
    dotspacemacs-delete-orphan-packages t))
 
 (defun dotspacemacs/init ()
@@ -69,10 +67,8 @@ before layers configuration."
   "Configuration function.
 This function is called at the very end of Spacemacs initialization after
 layers configuration."
+  (global-evil-search-highlight-persist -1)
   (setq powerline-default-separator nil)
-  (ido-vertical-mode -1)
-  (define-key evil-ex-map "e " 'ido-find-file)
-  (define-key evil-ex-map "b " 'ido-switch-buffer)
   (evil-leader/set-key "hda" 'helm-apropos)
   (setq undo-tree-auto-save-history t
         undo-tree-history-directory-alist

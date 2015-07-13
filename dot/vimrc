@@ -120,6 +120,9 @@ let g:syntastic_ignore_files = ['\m\.ml[ly]$']
 
 map K <Plug>(Man)
 
+let g:slimv_repl_split = 0
+let g:slimv_leader = '\'
+
 autocmd FileType ocaml set ts=2
 if executable('opam')
     let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
