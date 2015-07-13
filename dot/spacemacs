@@ -19,7 +19,7 @@
      version-control
      osx
      evil-commentary
-     my-slime)
+     slime)
    dotspacemacs-additional-packages '(slime-company)
    dotspacemacs-excluded-packages '(vi-tilde-fringe)
    dotspacemacs-delete-orphan-packages t))
