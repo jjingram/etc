@@ -33,10 +33,10 @@ before layers configuration."
    dotspacemacs-verbose-loading nil
    dotspacemacs-startup-banner 'official
    dotspacemacs-startup-lists '(recents projects)
-   dotspacemacs-themes '(solarized-light solarized-dark)
-   dotspacemacs-colorize-cursor-according-to-state t
+   dotspacemacs-themes '(leuven)
+   dotspacemacs-colorize-cursor-according-to-state nil
    dotspacemacs-default-font '("Anonymous Pro"
-                               :size 18
+                               :size 24
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -57,7 +57,7 @@ before layers configuration."
    dotspacemacs-inactive-transparency 90
    dotspacemacs-mode-line-unicode-symbols t
    dotspacemacs-smooth-scrolling t
-   dotspacemacs-smartparens-strict-mode nil
+   dotspacemacs-smartparens-strict-mode t
    dotspacemacs-highlight-delimiters 'all
    dotspacemacs-persistent-server nil
    dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
@@ -67,6 +67,7 @@ before layers configuration."
   "Configuration function.
 This function is called at the very end of Spacemacs initialization after
 layers configuration."
+  (global-font-lock-mode -1)
   (define-key evil-motion-state-map ";" 'helm-M-x)
   (setq vc-follow-symlinks t)
   (global-evil-search-highlight-persist -1)
@@ -75,7 +76,6 @@ layers configuration."
   (setq undo-tree-auto-save-history t
         undo-tree-history-directory-alist
         `(("." . ,(concat spacemacs-cache-directory "undo/"))))
-  (smartparens-strict-mode 1)
   (golden-ratio-mode 1))
 
 ;; Do not write anything past this comment. This is where Emacs will
