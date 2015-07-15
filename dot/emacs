@@ -1,4 +1,4 @@
-;; -*- mode: Emacs Lisp -*-
+;; -*- mode: emacs-lisp -*-
 
 ;; Turn off the mouse interface early in startup to avoid momentary display.
 (unless (eq system-type 'darwin)
@@ -9,7 +9,8 @@
 ;;; Package management
 (defvar my-packages
   '(evil evil-surround evil-indent-textobject evil-commentary evil-matchit
-         exec-path-from-shell popwin undo-tree diminish magit slime))
+         exec-path-from-shell better-defaults undo-tree diminish magit slime
+         emacs-eclim auto-complete ac-slime))
 
 (require 'package)
 (setq package-user-dir "~/.emacs.d/elpa/")
@@ -68,12 +69,15 @@
 ;;; Keybindings
 (evil-mode t)
 
-(define-prefix-command 'evil-popwin-map)
-(define-key evil-motion-state-map (kbd "SPC") 'evil-popwin-map)
-(define-key evil-normal-state-map (kbd "SPC") 'evil-popwin-map)
-(define-key evil-popwin-map "b" 'popwin:popup-buffer)
-(define-key evil-popwin-map "l" 'popwin:popup-last-buffer)
-(define-key evil-popwin-map "1" 'popwin:one-window)
+(define-key evil-ex-map "e " 'ido-find-file)
+(define-key evil-ex-map "b " 'ido-switch-buffer)
+
+(when (eq system-type 'darwin)
+  (setq mac-command-modifier 'meta)
+  (setq mac-option-modifier 'super))
+
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
 ;;; Editing
 (global-evil-surround-mode t)
@@ -91,7 +95,7 @@
 
 (blink-cursor-mode -1)
 
-(show-paren-mode t)
+(require 'popwin)
 
 ;; Smooth scrolling.
 (setq scroll-margin 1
@@ -120,6 +124,9 @@
 
 (load-theme 'leuven t)
 
+;;; Interactive do.
+(ido-ubiquitous t)
+
 ;;; Formatting
 (setq-default fill-column 80)
 
@@ -129,38 +136,44 @@
               tab-width 4)
 
 ;;; Recovery
-(setq backup-directory-alist `(("." . ,temporary-file-directory)))
-
-(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
-      auto-save-list-file-prefix temporary-file-directory)
-
-;; Persistent undo.
 (setq undo-tree-auto-save-history t
-      undo-tree-history-directory-alist `(("." . ,temporary-file-directory)))
+      undo-tree-history-directory-alist `(("." . ,(concat user-emacs-directory "undo"))))
 (diminish 'undo-tree-mode)
 
-;;; Emacs Lisp
-(defun imenu-elisp-sections ()
-  (setq imenu-prev-index-position-function nil)
-  (add-to-list 'imenu-generic-expression '("Sections" "^;;; \\(.+\\)$" 1) t))
+;;; Auto complete
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(ac-config-default)
+(diminish 'auto-complete-mode)
 
+;;; Emacs Lisp
 (defun jji/emacs-lisp-mode-hook ()
   (eldoc-mode)
-  (diminish 'eldoc-mode)
-  (imenu-elisp-sections))
+  (diminish 'eldoc-mode))
 (add-hook 'emacs-lisp-mode-hook #'jji/emacs-lisp-mode-hook)
 
 ;;; Common Lisp
 (require 'slime-autoloads)
+
 (setq inferior-lisp-program "sbcl"
       slime-contribs '(slime-fancy
                        slime-indentation
                        slime-sbcl-exts
-                       slime-scratch)
-      slime-complete-symbol*-fancy t
-      slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-(add-hook 'lisp-mode-hook 'slime-mode)
-(eval-after-load 'slime
-  (dolist (m `(,slime-mode-map ,slime-repl-mode-map))
-    (define-key m [(tab)] 'slime-fuzzy-complete-symbol))
-  '(diminish 'slime-mode))
+                       slime-scratch))
+
+(defun jji/lisp-mode-hook ()
+  (slime-mode)
+  (diminish 'slime-mode)
+  (set-up-slime-ac))
+(add-hook 'lisp-mode-hook #'jji/lisp-mode-hook)
+
+(add-hook 'slime-repl-mode-hook #'set-up-slime-ac)
+
+(eval-after-load 'auto-complete
+  '(add-to-list 'ac-modes #'slime-repl-mode))
+
+;;; Java
+(global-eclim-mode)
+
+(require 'ac-emacs-eclim-source)
+(ac-emacs-eclim-config)
