@@ -6,11 +6,37 @@
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+
 ;;; Package management
 (defvar my-packages
-  '(evil evil-surround evil-indent-textobject evil-commentary evil-matchit
-         exec-path-from-shell better-defaults undo-tree diminish magit slime
-         emacs-eclim auto-complete ac-slime))
+  '(better-defaults 
+    ;; Keybindings
+    evil
+    evil-surround
+    evil-indent-textobject
+    evil-commentary
+    evil-matchit
+    evil-jumper
+    ;; Interface
+    diminish
+    ;; Environment
+    exec-path-from-shell
+    ;; Version control
+    magit
+    ;; Recovery
+    undo-tree
+    ;; Completion
+    ido-ubiquitous
+    smex
+    flx-ido
+    auto-complete
+    ;; Common lisp
+    slime
+    ac-slime
+    ;; Help
+    guide-key
+    help+
+    help-fns+))
 
 (require 'package)
 (setq package-user-dir "~/.emacs.d/elpa/")
@@ -21,10 +47,9 @@
 (require 'cl-lib)
 
 (defun flatten (lst)
-  (cond
-   ((null lst) nil)
-   ((atom lst) (list lst))
-   (t (append (flatten (car lst)) (flatten (cdr lst))))))
+  (cond ((null lst) nil)
+        ((atom lst) (list lst))
+        (t (append (flatten (car lst)) (flatten (cdr lst))))))
 
 (defun filter (condp lst)
   (delq nil (mapcar (lambda (x) (and (funcall condp x) x)) lst)))
@@ -47,6 +72,8 @@
      (filter '(lambda (x) (eq nil (memq x pkgs-and-deps)))
              package-activated-list))))
 
+;; TODO: Find out why it errors after deleting a package and running a second
+;; time. Something to do with package-alist.
 (defun prune-packages (pkgs)
   (let ((orphans (get-orphaned-packages pkgs)))
     (dolist (pkg orphans)
@@ -56,21 +83,38 @@
 (defun packages-installed-p ()
   (not (memq 'nil (mapcar (lambda (p) (package-installed-p p)) my-packages))))
 
+(prune-packages my-packages)
+
 (unless (packages-installed-p)
   (package-refresh-contents)
   (dolist (p my-packages)
     (when (not (package-installed-p p))
       (package-install p))))
 
+
+;;; Environment
+
 ;; Emacs on OS X doesn't inherit from a shell so we need to set up the path.
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
+
 ;;; Keybindings
+(setq evil-want-C-w-in-emacs-state t)
+(global-evil-jumper-mode t)
 (evil-mode t)
 
 (define-key evil-ex-map "e " 'ido-find-file)
 (define-key evil-ex-map "b " 'ido-switch-buffer)
+(define-key evil-ex-map "h " 'finder-commentary)
+
+(define-key minibuffer-local-map [escape] 'keyboard-escape-quit)
+(define-key minibuffer-local-ns-map [escape] 'keyboard-escape-quit)
+(define-key minibuffer-local-completion-map [escape] 'keyboard-escape-quit)
+(define-key minibuffer-local-must-match-map [escape] 'keyboard-escape-quit)
+(define-key minibuffer-local-isearch-map [escape] 'keyboard-escape-quit)
+
+(evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
 
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta)
@@ -79,12 +123,47 @@
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
+(global-set-key (kbd "C-x C-r") 'ido-recentf-open-files)
+
+(defvar slime-mode nil)
+(defadvice evil-goto-definition (around evil-clever-goto-def activate)
+  "Make use of emacs', slime's and etags possibilities for finding definitions."
+  (cl-case major-mode
+    (lisp-mode (if slime-mode
+                   (or (slime-find-definitions (symbol-name (symbol-at-point)))
+                       ad-do-it)
+                 ad-do-it))
+    (emacs-lisp-mode (cond
+                      ((functionp (symbol-at-point)) (find-function-at-point))
+                      ((/= (variable-at-point) 0) (find-variable-at-point))
+                      ((function-called-at-point) (find-function (function-called-at-point)))
+                      (t ad-do-it)))
+    (otherwise
+     (let ((tag (symbol-name (symbol-at-point))))
+       (cond
+        ((bound-and-true-p 'ggtags-mode) (ggtags-find-tag tag))
+        ((and tags-file-name (find-tag-noselect tag)) (find-tag tag))
+        (t ad-do-it))))))
+
+
+;;; Help
+(require 'help+)
+(require 'help-fns+)
+
+(require 'guide-key)
+(setq guide-key/guide-key-sequence t
+      guide-key/popup-window-position 'bottom
+      guide-key/idle-delay 0.4)
+(guide-key-mode t)
+
+
 ;;; Editing
 (global-evil-surround-mode t)
 
 (evil-commentary-mode t)
 (diminish 'evil-commentary-mode)
 
+
 ;;; Interface
 (setq inhibit-startup-screen t
       initial-scratch-message "")
@@ -93,9 +172,11 @@
 
 (setq column-number-mode t)
 
-(blink-cursor-mode -1)
+;; Remove annoying ellipsis when printing sexp.
+(setq eval-expression-print-length nil
+      eval-expression-print-level nil)
 
-(require 'popwin)
+(blink-cursor-mode -1)
 
 ;; Smooth scrolling.
 (setq scroll-margin 1
@@ -114,19 +195,28 @@
                                         kill-buffer-query-functions)
       confirm-nonexistent-file-or-buffer nil)
 (put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-defun 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'erase-buffer 'disabled nil)
 (put 'scroll-left 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
 
-(set-frame-font "Anonymous Pro-24")
+(set-frame-font "Anonymous Pro-18")
+
+(global-font-lock-mode -1)
 
 (load-theme 'leuven t)
 
-;;; Interactive do.
-(ido-ubiquitous t)
+
+;;; Recovery
+(setq undo-tree-auto-save-history t
+      undo-tree-history-directory-alist `(("." . ,(concat user-emacs-directory "undo"))))
+(require 'undo-tree)
+(diminish 'undo-tree-mode)
 
+
 ;;; Formatting
 (setq-default fill-column 80)
 
@@ -135,23 +225,49 @@
 (setq-default indent-tabs-mode nil
               tab-width 4)
 
-;;; Recovery
-(setq undo-tree-auto-save-history t
-      undo-tree-history-directory-alist `(("." . ,(concat user-emacs-directory "undo"))))
-(diminish 'undo-tree-mode)
+
+;;; Navigation
+(require 'recentf)
+(setq recentf-max-menu-items 25)
+(recentf-mode t)
 
-;;; Auto complete
+(defun ido-recentf-open-files ()
+  "Find a recent file using Ido."
+  (interactive)
+  (let* ((file-assoc-list
+          (mapcar (lambda (x) (cons (file-name-nondirectory x) x))
+                  recentf-list))
+         (filename-list
+          (remove-duplicates (mapcar #'car file-assoc-list)
+                             :test #'string=))
+         (filename
+          (ido-completing-read "Choose recent file: " filename-list nil t)))
+    (when filename
+      (find-file (cdr (assoc filename file-assoc-list))))))
+
+
+;;; Completion
+
+;; Auto complete
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (ac-config-default)
 (diminish 'auto-complete-mode)
 
+;; Interactive do
+(setq ido-use-faces nil
+      flx-ido-use-faces t)
+(ido-ubiquitous t)
+(flx-ido-mode t)
+
+
 ;;; Emacs Lisp
 (defun jji/emacs-lisp-mode-hook ()
   (eldoc-mode)
   (diminish 'eldoc-mode))
 (add-hook 'emacs-lisp-mode-hook #'jji/emacs-lisp-mode-hook)
 
+
 ;;; Common Lisp
 (require 'slime-autoloads)
 
@@ -171,9 +287,3 @@
 
 (eval-after-load 'auto-complete
   '(add-to-list 'ac-modes #'slime-repl-mode))
-
-;;; Java
-(global-eclim-mode)
-
-(require 'ac-emacs-eclim-source)
-(ac-emacs-eclim-config)
