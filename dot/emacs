@@ -1,42 +1,48 @@
 ;; -*- mode: emacs-lisp -*-
 
-;; Turn off the mouse interface early in startup to avoid momentary display.
-(unless (eq system-type 'darwin)
-  (when (fboundp 'menu-bar-mode) (menu-bar-mode -1)))
+;; Turn off the mouse interface early in start up to avoid momentary display.
+(when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-
 ;;; Package management
 (defvar my-packages
   '(better-defaults 
+    markdown-mode
     ;; Keybindings
     evil
+    ;; Editing
     evil-surround
     evil-indent-textobject
     evil-commentary
+    paredit
+    ;; Navigation
     evil-matchit
     evil-jumper
     ;; Interface
     diminish
+    maxframe
     ;; Environment
     exec-path-from-shell
     ;; Version control
     magit
+    diff-hl
     ;; Recovery
     undo-tree
     ;; Completion
     ido-ubiquitous
     smex
     flx-ido
-    auto-complete
+    company
     ;; Common lisp
     slime
-    ac-slime
+    slime-company
     ;; Help
     guide-key
     help+
-    help-fns+))
+    help-fns+
+    ;; Haskell
+    haskell-mode))
 
 (require 'package)
 (setq package-user-dir "~/.emacs.d/elpa/")
@@ -73,7 +79,7 @@
              package-activated-list))))
 
 ;; TODO: Find out why it errors after deleting a package and running a second
-;; time. Something to do with package-alist.
+;; time.
 (defun prune-packages (pkgs)
   (let ((orphans (get-orphaned-packages pkgs)))
     (dolist (pkg orphans)
@@ -83,30 +89,28 @@
 (defun packages-installed-p ()
   (not (memq 'nil (mapcar (lambda (p) (package-installed-p p)) my-packages))))
 
-(prune-packages my-packages)
-
 (unless (packages-installed-p)
   (package-refresh-contents)
   (dolist (p my-packages)
     (when (not (package-installed-p p))
       (package-install p))))
 
-
 ;;; Environment
+(when (eq system-type 'darwin)
+  (menu-bar-mode t)
+  (setq ns-use-native-fullscreen nil)
+  (setq mac-command-modifier 'meta)
+  (setq mac-option-modifier 'super))
 
 ;; Emacs on OS X doesn't inherit from a shell so we need to set up the path.
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
-
 ;;; Keybindings
-(setq evil-want-C-w-in-emacs-state t)
+(setq evil-want-C-w-in-emacs-state t
+      evil-move-cursor-back nil)
 (global-evil-jumper-mode t)
 (evil-mode t)
-
-(define-key evil-ex-map "e " 'ido-find-file)
-(define-key evil-ex-map "b " 'ido-switch-buffer)
-(define-key evil-ex-map "h " 'finder-commentary)
 
 (define-key minibuffer-local-map [escape] 'keyboard-escape-quit)
 (define-key minibuffer-local-ns-map [escape] 'keyboard-escape-quit)
@@ -115,10 +119,6 @@
 (define-key minibuffer-local-isearch-map [escape] 'keyboard-escape-quit)
 
 (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
-
-(when (eq system-type 'darwin)
-  (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier 'super))
 
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
@@ -136,16 +136,15 @@
     (emacs-lisp-mode (cond
                       ((functionp (symbol-at-point)) (find-function-at-point))
                       ((/= (variable-at-point) 0) (find-variable-at-point))
-                      ((function-called-at-point) (find-function (function-called-at-point)))
+                      ((function-called-at-point)
+                       (find-function (function-called-at-point)))
                       (t ad-do-it)))
-    (otherwise
-     (let ((tag (symbol-name (symbol-at-point))))
-       (cond
-        ((bound-and-true-p 'ggtags-mode) (ggtags-find-tag tag))
-        ((and tags-file-name (find-tag-noselect tag)) (find-tag tag))
-        (t ad-do-it))))))
+    (otherwise (let ((tag (symbol-name (symbol-at-point))))
+                 (cond
+                  ((bound-and-true-p 'ggtags-mode) (ggtags-find-tag tag))
+                  ((and tags-file-name (find-tag-noselect tag)) (find-tag tag))
+                  (t ad-do-it))))))
 
-
 ;;; Help
 (require 'help+)
 (require 'help-fns+)
@@ -155,15 +154,17 @@
       guide-key/popup-window-position 'bottom
       guide-key/idle-delay 0.4)
 (guide-key-mode t)
+(diminish 'guide-key-mode)
 
-
 ;;; Editing
 (global-evil-surround-mode t)
 
 (evil-commentary-mode t)
 (diminish 'evil-commentary-mode)
 
-
+(eval-after-load 'paredit
+  '(diminish 'paredit-mode))
+
 ;;; Interface
 (setq inhibit-startup-screen t
       initial-scratch-message "")
@@ -203,29 +204,29 @@
 (put 'scroll-left 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
 
-(set-frame-font "Anonymous Pro-18")
+(set-frame-font "Anonymous Pro-24")
 
 (global-font-lock-mode -1)
 
 (load-theme 'leuven t)
 
-
+(setq same-window-buffer-names '("*Help*" "*Apropos*" "*Summary*"))
+
 ;;; Recovery
-(setq undo-tree-auto-save-history t
-      undo-tree-history-directory-alist `(("." . ,(concat user-emacs-directory "undo"))))
 (require 'undo-tree)
+(setq undo-tree-auto-save-history t
+      undo-tree-history-directory-alist `(("." . ,(concat user-emacs-directory
+                                                          "undo"))))
 (diminish 'undo-tree-mode)
 
-
 ;;; Formatting
 (setq-default fill-column 80)
 
 (setq-default sentence-end-double-space nil)
 
 (setq-default indent-tabs-mode nil
-              tab-width 4)
+              tab-width 8)
 
-
 ;;; Navigation
 (require 'recentf)
 (setq recentf-max-menu-items 25)
@@ -245,14 +246,17 @@
     (when filename
       (find-file (cdr (assoc filename file-assoc-list))))))
 
-
+(add-hook 'dired-mode-hook #'font-lock-mode)
+
 ;;; Completion
 
-;; Auto complete
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(ac-config-default)
-(diminish 'auto-complete-mode)
+;; Company
+(require 'company)
+(define-key company-active-map (kbd "\C-n") 'company-select-next)
+(define-key company-active-map (kbd "\C-p") 'company-select-previous)
+(define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
+(define-key company-active-map (kbd "<tab>") 'company-complete)
+(diminish 'company-mode)
 
 ;; Interactive do
 (setq ido-use-faces nil
@@ -260,14 +264,21 @@
 (ido-ubiquitous t)
 (flx-ido-mode t)
 
-
+;;; Version control
+(setq diff-hl-side 'right)
+(global-diff-hl-mode)
+(unless (display-graphic-p)
+  (setq diff-hl-side 'left)
+  (diff-hl-margin-mode))
+
 ;;; Emacs Lisp
 (defun jji/emacs-lisp-mode-hook ()
   (eldoc-mode)
-  (diminish 'eldoc-mode))
+  (diminish 'eldoc-mode)
+  (paredit-mode t)
+  (company-mode t))
 (add-hook 'emacs-lisp-mode-hook #'jji/emacs-lisp-mode-hook)
 
-
 ;;; Common Lisp
 (require 'slime-autoloads)
 
@@ -275,15 +286,30 @@
       slime-contribs '(slime-fancy
                        slime-indentation
                        slime-sbcl-exts
-                       slime-scratch))
+                       slime-scratch
+                       slime-company))
 
-(defun jji/lisp-mode-hook ()
+(defun my-lisp-mode-hook ()
   (slime-mode)
   (diminish 'slime-mode)
-  (set-up-slime-ac))
-(add-hook 'lisp-mode-hook #'jji/lisp-mode-hook)
+  (paredit-mode t)
+  (company-mode t))
+(add-hook 'lisp-mode-hook #'my-lisp-mode-hook)
 
-(add-hook 'slime-repl-mode-hook #'set-up-slime-ac)
+(defun my-slime-repl-mode-hook ()
+  (paredit-mode t)
+  (company-mode t))
+(add-hook 'slime-repl-mode-hook #'my-slime-repl-mode-hook)
 
-(eval-after-load 'auto-complete
-  '(add-to-list 'ac-modes #'slime-repl-mode))
+;;; Shell
+(defun my-shell-mode-hook ()
+  (font-lock-mode t))
+(add-hook 'shell-mode-hook #'my-shell-mode-hook)
+
+;;; C
+(defun my-c-mode-hook ()
+  (c-set-style "linux"))
+(add-hook 'c-mode-hook #'my-c-mode-hook)
+
+;;; Haskell
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)

@@ -34,7 +34,8 @@ alias h='history'
 # Maps to just `-'.
 alias -- -='cd -'
 # Get OS X Software Updates, and update Homebrew, opam, and their installed packages
-alias update='sudo softwareupdate -i -a; brew update; brew upgrade --all; brew cleanup; opam update; opam upgrade'
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade --all; brew
+cleanup; opam update; opam upgrade; cabal update'
 
 # Add tab completion for many Bash commands.
 if which brew > /dev/null && [ -f $(brew --prefix)/etc/bash_completion ]; then

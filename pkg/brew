@@ -1,4 +1,3 @@
-caskroom/cask/brew-cask
 macvim --with-lua --with-luajit --override-system-vim --custom-icons
 bash
 git
@@ -12,9 +11,13 @@ postgresql
 go
 gdb
 python3
-ghc cabal-install icu4c
+ghc
+cabal-install
 wget
 opam
-gist
 rlwrap
 aspell
+homebrew/versions/llvm36
+binutils
+gcc
+opencv --with-ffmpeg
