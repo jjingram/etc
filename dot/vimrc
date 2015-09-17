@@ -20,19 +20,15 @@ Plug 'scrooloose/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
-Plug 'ervandew/supertab'
 Plug 'bruno-/vim-man'
-Plug 'junegunn/goyo.vim'
+Plug 'ervandew/supertab'
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
+Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
+Plug 'bitc/vim-hdevtools', {'for': 'haskell'}
+Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
 Plug 'klen/python-mode', {'for': 'python'}
 Plug 'fatih/vim-go', {'for': 'go'}
-Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
-Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
-Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
 Plug 'def-lkb/ocp-indent-vim', {'for': 'ocaml'}
-Plug 'kovisoft/slimv', {'for': 'lisp'}
-Plug 'def-lkb/vimbufsync', {'for': 'coq'}
-Plug 'the-lambda-church/coquille', {'for': 'coq', 'branch': 'pathogen-bundle'}
 call plug#end()
 
 set background=light
@@ -52,7 +48,7 @@ if &term =~ '^screen'
     set ttymouse=xterm2
 endif
 set noerrorbells visualbell t_vb=
-set completeopt=menu,longest
+set completeopt=menu
 set winminheight=0
 set splitright
 set backup
@@ -61,6 +57,7 @@ if has('persistent_undo')
 endif
 
 let mapleader=' '
+let maplocalleader=' '
 nnoremap ! :!
 " Easier horizontal shifting.
 map zl zL
@@ -84,25 +81,43 @@ autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd BufWinEnter,WinEnter <buffer>
 \ if bufname("") | let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1) | endif
 autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell
+autocmd BufWinEnter quickfix setlocal linebreak
+
 autocmd FileType go setlocal ts=8 noet
 autocmd FileType c,cpp,sh,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
-autocmd FileType haskell setlocal ts=2
-autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-autocmd FileType haskell call SuperTabSetDefaultCompletionType("<c-x><c-o>")
-let g:haskellmode_completion_ghc = 0
 
-function! Coq()
-    map <buffer> <silent> <leader>j :CoqNext<cr>
-    map <buffer> <silent> <leader>k :CoqUndo<cr>
-    map <buffer> <silent> <leader>G :CoqToCursor<cr>
-    set tabstop=2
-    hi CheckedByCoq ctermbg=7
-    hi clear SentToCoq
+function! FormatHaskell()
+    if !empty(v:char)
+        return 1
+    else
+        let l:filter = "hindent --style gibiansky"
+        let l:command = v:lnum.','.(v:lnum+v:count-1).'!'.l:filter
+        execute l:command
+    endif
 endfunction
-autocmd FileType coq call Coq()
 
-" :h g:incsearch#auto_nohlsearch
+let g:haskellmode_completion_ghc = 0
+function! Haskell()
+    setlocal ts=2
+    setlocal omnifunc=necoghc#omnifunc
+    setlocal formatexpr=FormatHaskell()
+    map <buffer> <silent> <localleader>t<cr> :HdevtoolsType
+    map <buffer> <silent> <localleader>c<cr> :HdevtoolsClear
+endfunction
+autocmd FileType haskell call Haskell()
+
+function! OCaml()
+    setlocal ts=2
+    if executable('opam') && executable('ocamlmerlin') && has('python')
+        let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+        execute "set rtp+=" . g:opamshare . "/merlin/vim"
+        execute "helptags " . g:opamshare . "/merlin/vim/doc"
+        let g:syntastic_ocaml_checkers = ['merlin']
+    endif
+endfunction
+autocmd FileType ocaml call OCaml()
+
 set hlsearch
 let g:incsearch#auto_nohlsearch = 1
 map n <Plug>(incsearch-nohl-n)
@@ -121,19 +136,6 @@ map K <Plug>(Man)
 
 let g:slimv_repl_split = 0
 let g:slimv_leader = '\'
-
-autocmd FileType ocaml set ts=2
-if executable('opam')
-    let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
-    if executable('ocamlmerlin') && has('python')
-        execute "set rtp+=" . g:opamshare . "/merlin/vim"
-        let g:syntastic_ocaml_checkers = ['merlin']
-        autocmd FileType ocaml
-            \ call SuperTabSetDefaultCompletionType("<c-x><c-o>")
-        " Run once:
-        " :execute "helptags " . g:opamshare . "/merlin/vim/doc"
-    endif
-endif
 
 function! StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.
