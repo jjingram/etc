@@ -22,14 +22,21 @@ Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bruno-/vim-man'
 Plug 'ervandew/supertab'
+Plug 'luochen1990/rainbow'
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
-Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
-Plug 'bitc/vim-hdevtools', {'for': 'haskell'}
+Plug 'neovimhaskell/haskell-vim'
+Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
 Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
 Plug 'klen/python-mode', {'for': 'python'}
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'def-lkb/ocp-indent-vim', {'for': 'ocaml'}
+Plug 'kovisoft/paredit', {'for': ['scheme', 'racket', 'lisp', 'clojure']}
+Plug 'wlangstroth/vim-racket'
+Plug 'scribble.vim'
 call plug#end()
+
+" Include local preferences
+set rtp+=$HOME/etc/vim
 
 set background=light
 colorscheme solarized
@@ -87,36 +94,7 @@ autocmd FileType go setlocal ts=8 noet
 autocmd FileType c,cpp,sh,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
 
-function! FormatHaskell()
-    if !empty(v:char)
-        return 1
-    else
-        let l:filter = "hindent --style gibiansky"
-        let l:command = v:lnum.','.(v:lnum+v:count-1).'!'.l:filter
-        execute l:command
-    endif
-endfunction
-
-let g:haskellmode_completion_ghc = 0
-function! Haskell()
-    setlocal ts=2
-    setlocal omnifunc=necoghc#omnifunc
-    setlocal formatexpr=FormatHaskell()
-    map <buffer> <silent> <localleader>t<cr> :HdevtoolsType
-    map <buffer> <silent> <localleader>c<cr> :HdevtoolsClear
-endfunction
-autocmd FileType haskell call Haskell()
-
-function! OCaml()
-    setlocal ts=2
-    if executable('opam') && executable('ocamlmerlin') && has('python')
-        let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
-        execute "set rtp+=" . g:opamshare . "/merlin/vim"
-        execute "helptags " . g:opamshare . "/merlin/vim/doc"
-        let g:syntastic_ocaml_checkers = ['merlin']
-    endif
-endfunction
-autocmd FileType ocaml call OCaml()
+autocmd BufNewFile,BufRead *.scrbl set ft=scribble
 
 set hlsearch
 let g:incsearch#auto_nohlsearch = 1

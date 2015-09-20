@@ -21,3 +21,4 @@ homebrew/versions/llvm36
 binutils
 gcc
 opencv --with-ffmpeg
+racket
