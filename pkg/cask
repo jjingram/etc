@@ -10,4 +10,5 @@ slate
 emacs
 font-anonymous-pro
 font-lora
-eclipse-ide
+racket
+postgres

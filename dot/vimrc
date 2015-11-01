@@ -11,9 +11,9 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-dispatch'
+Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
-Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'kien/ctrlp.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/syntastic'
@@ -22,28 +22,22 @@ Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bruno-/vim-man'
 Plug 'ervandew/supertab'
-Plug 'luochen1990/rainbow'
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
-Plug 'neovimhaskell/haskell-vim'
+Plug 'dag/vim2hs', {'for': 'haskell'}
 Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
-Plug 'eagletmt/neco-ghc', {'for': 'haskell'}
 Plug 'klen/python-mode', {'for': 'python'}
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'def-lkb/ocp-indent-vim', {'for': 'ocaml'}
 Plug 'kovisoft/paredit', {'for': ['scheme', 'racket', 'lisp', 'clojure']}
 Plug 'wlangstroth/vim-racket'
-Plug 'scribble.vim'
 call plug#end()
-
-" Include local preferences
-set rtp+=$HOME/etc/vim
 
 set background=light
 colorscheme solarized
 
-set textwidth=79
+"set textwidth=79
 set clipboard=unnamed
-set colorcolumn=80
+set colorcolumn=100
 set nocursorline
 set nojoinspaces
 set hidden
@@ -63,15 +57,16 @@ if has('persistent_undo')
     set undofile undolevels=1000 undoreload=10000
 endif
 
-let mapleader=' '
-let maplocalleader=' '
+set guifont=Anonymous\ Pro:h24
+set guioptions=
+
+let mapleader='\'
 nnoremap ! :!
 " Easier horizontal shifting.
 map zl zL
 map zh zH
 " NOTE: The "Q" command formerly performed this function. If you still want to
 " use "Q" for formatting, use these mappings:
-map Q gq
 map Q gq
 " Wrapped lines goes down/up to next row, rather than next line in file.
 map j gj
@@ -85,16 +80,14 @@ vmap > >gv
 " Strip trailing whitespace on save.
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 " Highlight characters beyond 80 columns.
-autocmd BufWinEnter,WinEnter <buffer>
-\ if bufname("") | let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1) | endif
-autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell
+" autocmd BufWinEnter,WinEnter <buffer>
+"     \ if bufname("") | let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1) | endif
+autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell textwidth=100 linebreak
 autocmd BufWinEnter quickfix setlocal linebreak
 
 autocmd FileType go setlocal ts=8 noet
 autocmd FileType c,cpp,sh,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
-
-autocmd BufNewFile,BufRead *.scrbl set ft=scribble
 
 set hlsearch
 let g:incsearch#auto_nohlsearch = 1
@@ -112,8 +105,10 @@ let g:syntastic_ignore_files = ['\m\.ml[ly]$']
 
 map K <Plug>(Man)
 
-let g:slimv_repl_split = 0
-let g:slimv_leader = '\'
+let g:neocomplete#enable_at_startup = 1
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
 
 function! StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.

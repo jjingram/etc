@@ -18,10 +18,6 @@ while [[ -h $SOURCE ]]; do
 done
 DIR=$(cd -P $(dirname $SOURCE) && pwd)
 
-# Allow italics in terminal.
-tic $DIR/init/xterm-256-color-italic.terminfo
-tic $DIR/init/screen-256color-italic.terminfo
-
 # Setup OS X defaults.
 $DIR/osx
 
@@ -55,6 +51,9 @@ done
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 mvim -v +PlugInstall +PluginClean! +qall
+for i in $(ls $DIR/vim); do
+	ln -sf $DIR/vim/$i "$HOME/.vim/"
+done
 
 # Setup Haskell.
 cabal update

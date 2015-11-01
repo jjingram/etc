@@ -1,4 +1,4 @@
-macvim --with-lua --with-luajit --override-system-vim --custom-icons
+macvim --with-lua --with-luajit --with-override-system-vim --with-custom-icons
 bash
 git
 tmux
@@ -17,6 +17,7 @@ wget
 opam
 rlwrap
 aspell
+homebrew/versions/llvm34
 homebrew/versions/llvm36
 binutils
 gcc

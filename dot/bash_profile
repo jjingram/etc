@@ -1,4 +1,4 @@
-export EDITOR='vim'
+export EDITOR='mvim -v'
 
 export PATH=~/bin:$PATH
 # Go.
@@ -6,6 +6,8 @@ export GOPATH=$HOME/dev/go
 PATH=$PATH:$GOPATH/bin
 # Haskell.
 PATH=$PATH:$HOME/.cabal/bin
+# Postgres.app
+PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.4/bin
 
 # OPAM configuration
 . /Users/jji/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
