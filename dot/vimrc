@@ -11,6 +11,7 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-fugitive'
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
@@ -22,6 +23,7 @@ Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bruno-/vim-man'
 Plug 'ervandew/supertab'
+Plug 'mileszs/ack.vim'
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'dag/vim2hs', {'for': 'haskell'}
 Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
@@ -86,7 +88,7 @@ autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell textwidth=100 linebre
 autocmd BufWinEnter quickfix setlocal linebreak
 
 autocmd FileType go setlocal ts=8 noet
-autocmd FileType c,cpp,sh,make setlocal ts=8 noet
+autocmd FileType c,cpp,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
 
 set hlsearch
@@ -103,11 +105,14 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_ignore_files = ['\m\.ml[ly]$']
 
+let g:go_bin_path = expand("~/dev/go/bin")
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+
 map K <Plug>(Man)
 
-let g:neocomplete#enable_at_startup = 1
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
 endif
 
 function! StripTrailingWhitespace()

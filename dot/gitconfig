@@ -16,6 +16,9 @@ branches = branch -a
 remotes = remote -v
 amend = commit --amend --reuse-message=HEAD
 
+[pager]
+status = true
+
 [user]
 email = jarrod.jeffi@gmail.com
 name = Jarrod Jeffrey Ingram
