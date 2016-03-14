@@ -15,6 +15,7 @@ tags = tag -l
 branches = branch -a
 remotes = remote -v
 amend = commit --amend --reuse-message=HEAD
+compare = !sh -c 'git diff `git merge-base $2 $1`..$1' -
 
 [pager]
 status = true
@@ -39,3 +40,5 @@ default = simple
 editor = /usr/local/bin/mvim -v
 excludesfile = ~/.gitignore
 attributesfile = ~/.gitattributes
+[rerere]
+	enabled = true

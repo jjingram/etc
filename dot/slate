@@ -3,4 +3,4 @@ bind f:alt move screenOriginX;screenOriginY screenSizeX;screenSizeY
 bind q:alt focus 'iTerm'
 bind w:alt focus 'Google Chrome'
 bind e:alt focus 'Finder'
-bind r:alt focus 'Messenger'
+bind r:alt focus 'Slack'

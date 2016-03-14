@@ -3,6 +3,7 @@ export EDITOR='mvim -v'
 export PATH=~/bin:$PATH
 # Go.
 export GOPATH=$HOME/dev/go
+export GOBIN=$GOPATH/bin
 PATH=$PATH:$GOPATH/bin
 # Haskell.
 PATH=$PATH:$HOME/.cabal/bin
