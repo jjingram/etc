@@ -12,40 +12,33 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-fugitive'
-Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
-Plug 'kien/ctrlp.vim'
-Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/syntastic'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bruno-/vim-man'
 Plug 'ervandew/supertab'
 Plug 'mileszs/ack.vim'
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'dag/vim2hs', {'for': 'haskell'}
-Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'}
 Plug 'klen/python-mode', {'for': 'python'}
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'def-lkb/ocp-indent-vim', {'for': 'ocaml'}
-Plug 'kovisoft/paredit', {'for': ['scheme', 'racket', 'lisp', 'clojure']}
-Plug 'wlangstroth/vim-racket'
+Plug 'kovisoft/paredit', {'for': ['scheme', 'racket', 'clojure']}
+Plug 'kovisoft/slimv', {'for': 'lisp'}
 call plug#end()
 
 set background=light
-colorscheme solarized
 
-"set textwidth=79
+set textwidth=79
 set clipboard=unnamed
-set colorcolumn=100
+set colorcolumn=79
 set nocursorline
 set nojoinspaces
 set hidden
 set ignorecase hlsearch smartcase
 set shortmess+=aoOstTI
-set expandtab tabstop=4 shiftwidth=0 softtabstop=-1
+set expandtab tabstop=2
 set mouse=a mousehide
 if &term =~ '^screen'
     set ttymouse=xterm2
@@ -59,32 +52,18 @@ if has('persistent_undo')
     set undofile undolevels=1000 undoreload=10000
 endif
 
-set guifont=Anonymous\ Pro:h24
-set guioptions=
-
-let mapleader='\'
 nnoremap ! :!
-" Easier horizontal shifting.
 map zl zL
 map zh zH
-" NOTE: The "Q" command formerly performed this function. If you still want to
-" use "Q" for formatting, use these mappings:
 map Q gq
-" Wrapped lines goes down/up to next row, rather than next line in file.
 map j gj
 map k gk
-" Yank from the cursor to the end of the line, to be consistent with C and D.
 map Y y$
-" Shift without exiting visual mode.
 vmap < <gv
 vmap > >gv
 
-" Strip trailing whitespace on save.
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
-" Highlight characters beyond 80 columns.
-" autocmd BufWinEnter,WinEnter <buffer>
-"     \ if bufname("") | let w:m2=matchadd('ColorColumn', '\%>79v.\+', -1) | endif
-autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell textwidth=100 linebreak
+autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell linebreak
 autocmd BufWinEnter quickfix setlocal linebreak
 
 autocmd FileType go setlocal ts=8 noet
@@ -100,20 +79,13 @@ map # <Plug>(incsearch-nohl-#)
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_ignore_files = ['\m\.ml[ly]$']
-
-let g:go_bin_path = expand("~/dev/go/bin")
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-
 map K <Plug>(Man)
 
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
+
+set rtp^="/Users/jji/.opam/system/share/ocp-indent/vim"
 
 function! StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.

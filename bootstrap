@@ -18,43 +18,7 @@ while [[ -h $SOURCE ]]; do
 done
 DIR=$(cd -P $(dirname $SOURCE) && pwd)
 
-# Setup OS X defaults.
-$DIR/osx
-
-# Install homebrew and install packages.
-which brew > /dev/null
-if [[ $? -ne 0 ]]; then
-	ruby -e $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)
-fi
-cat $DIR/pkg/tap | xargs -L 1 brew tap
-cat $DIR/pkg/brew | xargs -L 1 brew install
-cat $DIR/pkg/cask | xargs -L 1 brew cask install
-
-# Link dot files.
 for i in $(ls $DIR/dot); do
 	echo Linking $DIR/dot/$i to $HOME/.$i
 	ln -sf $DIR/dot/$i "$HOME/.$i"
 done
-
-# Link config files.
-SRC_DIR=$DIR/config
-DST_DIR=$HOME/.config
-for i in $(ls $SRC_DIR); do
-	mkdir -p $DST_DIR/$i
-	for j in $(ls $SRC_DIR/$i); do
-		echo $SRC_DIR/$i/$j to $DST_DIR/$i/$j
-		ln -sfh $SRC_DIR/$i/$j $DST_DIR/$i/$j
-	done
-done
-
-# Setup Vim.
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-mvim -v +PlugInstall +PluginClean! +qall
-for i in $(ls $DIR/vim); do
-	ln -sf $DIR/vim/$i "$HOME/.vim/"
-done
-
-# Setup Haskell.
-cabal update
-cabal install $(paste -s $DIR/pkg/cabal)
