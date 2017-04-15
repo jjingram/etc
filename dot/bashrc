@@ -20,14 +20,6 @@ alias g='git'
 alias h='history'
 alias -- -='cd -'
 
-if which brew > /dev/null && [ -f $(brew --prefix)/etc/bash_completion ]; then
-	. $(brew --prefix)/etc/bash_completion
-fi
-
-if type _git &> /dev/null && [ -f $(brew --prefix)/etc/bash_completion.d/git-completion.bash ]; then
-	complete -o default -o nospace -F _git g
-fi
-
 reset=$(tput sgr0)
 bold=$(tput bold)
 black=$(tput setaf 0)

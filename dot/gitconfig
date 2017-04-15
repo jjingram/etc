@@ -35,7 +35,7 @@ prompt = false
 default = simple
 
 [core]
-editor = /usr/local/bin/mvim -v
+editor = vim
 excludesfile = ~/.gitignore
 attributesfile = ~/.gitattributes
 

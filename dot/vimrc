@@ -30,7 +30,7 @@ Plug 'kovisoft/slimv', {'for': 'lisp'}
 call plug#end()
 
 set background=light
-colorscheme jji
+colorscheme acme
 
 set textwidth=79
 set clipboard=unnamed
@@ -53,8 +53,10 @@ set backup
 if has('persistent_undo')
     set undofile undolevels=1000 undoreload=10000
 endif
-set guifont=Anonymous\ Pro:h24
+set guifont=Anonymous\ Pro\ 18
 set guioptions=
+set noerrorbells visualbell t_vb=
+set guicursor+=a:blinkon0
 
 nnoremap ! :!
 map zl zL
@@ -66,6 +68,7 @@ map Y y$
 vmap < <gv
 vmap > >gv
 
+autocmd GUIEnter * set visualbell t_vb=
 autocmd BufRead,BufNewFile *.sch setlocal ft=scheme
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell linebreak
@@ -94,6 +97,8 @@ let g:ctrlp_cmd = 'CtrlPBuffer'
 let g:hindent_on_save = 1
 let g:hindent_indent_size = 2
 let g:hindent_line_length = 79
+
+let g:vim_markdown_folding_disabled = 1
 
 set rtp^="/Users/jji/.opam/system/share/ocp-indent/vim"
 

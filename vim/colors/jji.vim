@@ -18,7 +18,7 @@ colorscheme default
 " --------------------------------
 " Editor settings
 " --------------------------------
-"hi Normal guifg=NONE guibg=NONE gui=NONE
+hi Normal guifg=Black guibg=White gui=NONE
 "hi Cursor guifg=NONE guibg=NONE gui=NONE
 hi CursorLine guifg=NONE guibg=NONE gui=NONE
 "hi LineNr guifg=NONE guibg=NONE gui=NONE
@@ -92,7 +92,7 @@ hi Function guifg=NONE guibg=NONE gui=NONE
 " --------------------------------
 " Language constructs
 " --------------------------------
-hi Statement guifg=NONE guibg=NONE gui=bold
+hi Statement guifg=NONE guibg=NONE gui=NONE
 "hi Conditional guifg=NONE guibg=NONE gui=NONE
 "hi Repeat guifg=NONE guibg=NONE gui=NONE
 "hi Label guifg=NONE guibg=NONE gui=NONE
