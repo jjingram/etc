@@ -19,8 +19,9 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'bruno-/vim-man'
 Plug 'ervandew/supertab'
 Plug 'mileszs/ack.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
-Plug 'dag/vim2hs', {'for': 'haskell'}
+Plug 'alx741/vim-hindent', {'for': 'haskell'}
 Plug 'klen/python-mode', {'for': 'python'}
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'def-lkb/ocp-indent-vim', {'for': 'ocaml'}
@@ -29,10 +30,11 @@ Plug 'kovisoft/slimv', {'for': 'lisp'}
 call plug#end()
 
 set background=light
+colorscheme jji
 
 set textwidth=79
 set clipboard=unnamed
-set colorcolumn=79
+set colorcolumn=80
 set nocursorline
 set nojoinspaces
 set hidden
@@ -51,6 +53,8 @@ set backup
 if has('persistent_undo')
     set undofile undolevels=1000 undoreload=10000
 endif
+set guifont=Anonymous\ Pro:h24
+set guioptions=
 
 nnoremap ! :!
 map zl zL
@@ -62,11 +66,11 @@ map Y y$
 vmap < <gv
 vmap > >gv
 
+autocmd BufRead,BufNewFile *.sch setlocal ft=scheme
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell linebreak
 autocmd BufWinEnter quickfix setlocal linebreak
-
-autocmd FileType go setlocal ts=8 noet
+autocmd FileType haskell setlocal ts=8 et sts=2 sw=2 sr
 autocmd FileType c,cpp,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
 
@@ -84,6 +88,12 @@ map K <Plug>(Man)
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
+
+let g:ctrlp_cmd = 'CtrlPBuffer'
+
+let g:hindent_on_save = 1
+let g:hindent_indent_size = 2
+let g:hindent_line_length = 79
 
 set rtp^="/Users/jji/.opam/system/share/ocp-indent/vim"
 
