@@ -18,133 +18,133 @@ colorscheme default
 " --------------------------------
 " Editor settings
 " --------------------------------
-hi Normal guifg=Black guibg=White gui=NONE
-"hi Cursor guifg=NONE guibg=NONE gui=NONE
-hi CursorLine guifg=NONE guibg=NONE gui=NONE
-"hi LineNr guifg=NONE guibg=NONE gui=NONE
-hi CursorLineNR guifg=NONE guibg=NONE gui=NONE
+hi Normal ctermfg=Black ctermbg=NONE cterm=NONE
+"hi Cursor ctermfg=NONE ctermbg=NONE cterm=NONE
+hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi LineNr ctermfg=NONE ctermbg=NONE cterm=NONE
+hi CursorLineNR ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " -----------------
 " - Number column -
 " -----------------
-"hi CursorColumn guifg=NONE guibg=NONE gui=NONE
-"hi FoldColumn guifg=NONE guibg=NONE gui=NONE
-"hi SignColumn guifg=NONE guibg=NONE gui=NONE
-"hi Folded guifg=NONE guibg=NONE gui=NONE
+"hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi FoldColumn ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi SignColumn ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Folded ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " -------------------------
 " - Window/Tab delimiters -
 " -------------------------
-"hi VertSplit guifg=NONE guibg=NONE gui=NONE
-hi ColorColumn guifg=NONE guibg=Gray gui=NONE
-"hi TabLine guifg=NONE guibg=NONE gui=NONE
-"hi TabLineFill guifg=NONE guibg=NONE gui=NONE
-"hi TabLineSel guifg=NONE guibg=NONE gui=NONE
+"hi VertSplit ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi ColorColumn ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi TabLine ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi TabLineFill ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi TabLineSel ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " -------------------------------
 " - File Navigation / Searching -
 " -------------------------------
-"hi Directory guifg=NONE guibg=NONE gui=NONE
-"hi Search guifg=NONE guibg=NONE gui=NONE
-"hi IncSearch guifg=NONE guibg=NONE gui=NONE
+"hi Directory ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Search ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi IncSearch ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " -----------------
 " - Prompt/Status -
 " -----------------
-"hi StatusLine guifg=NONE guibg=NONE gui=NONE
-"hi StatusLineNC guifg=NONE guibg=NONE gui=NONE
-"hi WildMenu guifg=NONE guibg=NONE gui=NONE
-"hi Question guifg=NONE guibg=NONE gui=NONE
-"hi Title guifg=NONE guibg=NONE gui=NONE
-"hi ModeMsg guifg=NONE guibg=NONE gui=NONE
-"hi MoreMsg guifg=NONE guibg=NONE gui=NONE
+"hi StatusLine ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi StatusLineNC ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi WildMenu ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Question ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Title ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi ModeMsg ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi MoreMsg ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " --------------
 " - Visual aid -
 " --------------
-"hi MatchParen guifg=NONE guibg=NONE gui=NONE
-"hi Visual guifg=NONE guibg=NONE gui=NONE
-"hi VisualNOS guifg=NONE guibg=NONE gui=NONE
-"hi NonText guifg=NONE guibg=NONE gui=NONE
+"hi MatchParen ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Visual ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi VisualNOS ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi NonText ctermfg=NONE ctermbg=NONE cterm=NONE
 
-"hi Todo guifg=NONE guibg=NONE gui=NONE
-"hi Underlined guifg=NONE guibg=NONE gui=NONE
-"hi Error guifg=NONE guibg=NONE gui=NONE
-"hi ErrorMsg guifg=NONE guibg=NONE gui=NONE
-"hi WarningMsg guifg=NONE guibg=NONE gui=NONE
-"hi Ignore guifg=NONE guibg=NONE gui=NONE
-"hi SpecialKey guifg=NONE guibg=NONE gui=NONE
+"hi Todo ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Underlined ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Error ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi ErrorMsg ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi WarningMsg ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Ignore ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi SpecialKey ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " --------------------------------
 " Variable types
 " --------------------------------
-hi Constant guifg=NONE guibg=NONE gui=NONE
-"hi String guifg=NONE guibg=NONE gui=NONE
-"hi StringDelimiter guifg=NONE guibg=NONE gui=NONE
-"hi Character guifg=NONE guibg=NONE gui=NONE
-"hi Number guifg=NONE guibg=NONE    gui=NONE
-"hi Boolean guifg=NONE guibg=NONE gui=NONE
-"hi Float guifg=NONE guibg=NONE gui=NONE
+hi Constant ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi String ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi StringDelimiter ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Character ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Number ctermfg=NONE ctermbg=NONE    cterm=NONE
+"hi Boolean ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Float ctermfg=NONE ctermbg=NONE cterm=NONE
 
-hi Identifier guifg=NONE guibg=NONE gui=NONE
-hi Function guifg=NONE guibg=NONE gui=NONE
+hi Identifier ctermfg=NONE ctermbg=NONE cterm=NONE
+hi Function ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " --------------------------------
 " Language constructs
 " --------------------------------
-hi Statement guifg=NONE guibg=NONE gui=NONE
-"hi Conditional guifg=NONE guibg=NONE gui=NONE
-"hi Repeat guifg=NONE guibg=NONE gui=NONE
-"hi Label guifg=NONE guibg=NONE gui=NONE
-"hi Operator guifg=NONE guibg=NONE gui=NONE
-"hi Keyword guifg=NONE guibg=NONE gui=NONE
-"hi Exception guifg=NONE guibg=NONE gui=NONE
-hi Comment guifg=Gray guibg=NONE gui=NONE
+hi Statement ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Conditional ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Repeat ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Label ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Operator ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Keyword ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Exception ctermfg=NONE ctermbg=NONE cterm=NONE
+hi Comment ctermfg=Gray ctermbg=NONE cterm=NONE
 
-hi Special guifg=NONE guibg=NONE gui=NONE
-"hi SpecialChar guifg=NONE guibg=NONE gui=NONE
-"hi Tag guifg=NONE guibg=NONE gui=NONE
-"hi Delimiter guifg=NONE guibg=NONE gui=NONE
-"hi SpecialComment guifg=NONE guibg=NONE gui=NONE
-"hi Debug guifg=NONE guibg=NONE gui=NONE
+hi Special ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi SpecialChar ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Tag ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Delimiter ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi SpecialComment ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Debug ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " ----------
 " - C like -
 " ----------
-hi PreProc guifg=NONE guibg=NONE gui=NONE
-"hi Include guifg=NONE guibg=NONE gui=NONE
-"hi Define guifg=NONE guibg=NONE gui=NONE
-"hi Macro guifg=NONE guibg=NONE gui=NONE
-"hi PreCondit guifg=NONE guibg=NONE gui=NONE
+hi PreProc ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Include ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Define ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Macro ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi PreCondit ctermfg=NONE ctermbg=NONE cterm=NONE
 
-hi Type guifg=NONE guibg=NONE gui=NONE
-"hi StorageClass guifg=NONE guibg=NONE gui=NONE
-"hi Structure guifg=NONE guibg=NONE gui=NONE
-"hi Typedef guifg=NONE guibg=NONE gui=NONE
+hi Type ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi StorageClass ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Structure ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi Typedef ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " --------------------------------
 " Diff
 " --------------------------------
-"hi DiffAdd guifg=NONE guibg=NONE gui=NONE
-"hi DiffChange guifg=NONE guibg=NONE gui=NONE
-"hi DiffDelete guifg=NONE guibg=NONE gui=NONE
-"hi DiffText guifg=NONE guibg=NONE gui=NONE
+"hi DiffAdd ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi DiffChange ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi DiffDelete ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi DiffText ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " --------------------------------
 " Completion menu
 " --------------------------------
-"hi Pmenu guifg=NONE guibg=NONE gui=NONE
-"hi PmenuSel guifg=NONE guibg=NONE gui=NONE
-"hi PmenuSbar guifg=NONE guibg=NONE gui=NONE
-"hi PmenuThumb guifg=NONE guibg=NONE gui=NONE
+"hi Pmenu ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi PmenuSel ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi PmenuSbar ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi PmenuThumb ctermfg=NONE ctermbg=NONE cterm=NONE
 
 " --------------------------------
 " Spelling
 " --------------------------------
-"hi SpellBad guifg=NONE guibg=NONE gui=NONE
-"hi SpellCap guifg=NONE guibg=NONE gui=NONE
-"hi SpellLocal guifg=NONE guibg=NONE gui=NONE
-"hi SpellRare guifg=NONE guibg=NONE gui=NONE
+"hi SpellBad ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi SpellCap ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi SpellLocal ctermfg=NONE ctermbg=NONE cterm=NONE
+"hi SpellRare ctermfg=NONE ctermbg=NONE cterm=NONE
 
 "--------------------------------------------------------------------
 " Specific settings                                                 |

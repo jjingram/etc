@@ -10,8 +10,6 @@ runtime colors/jji.vim
 
 let g:colors_name = "acme"
 
-highlight clear Normal
-highlight clear NonText
 highlight clear StatusLine
 highlight clear StatusLineNC
 highlight clear WildMenu
@@ -19,11 +17,8 @@ highlight clear VertSplit
 highlight clear Visual
 highlight clear ColorColumn
 
-highlight! Normal guibg=#ffffea guifg=#000000
-highlight! NonText guibg=bg guifg=#ffffea
-highlight! StatusLine guibg=#aeeeee guifg=#000000 gui=NONE
-highlight! StatusLineNC guibg=#eaffff guifg=#000000 gui=NONE
-highlight! WildMenu guibg=#000000 guifg=#eaffff gui=NONE
-highlight! VertSplit guibg=#ffffea guifg=#000000 gui=NONE
-highlight! Visual guibg=fg guifg=bg
-highlight! ColorColumn guifg=NONE guibg=#eaffff
+highlight! StatusLine ctermbg=Blue ctermfg=White cterm=NONE
+highlight! StatusLineNC ctermbg=Blue ctermfg=White cterm=NONE
+highlight! WildMenu ctermbg=Black ctermfg=White cterm=NONE
+highlight! Visual ctermbg=Black ctermfg=White
+highlight! ColorColumn ctermfg=NONE ctermbg=LightGray
