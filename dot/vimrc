@@ -59,6 +59,12 @@ set guioptions=
 set noerrorbells visualbell t_vb=
 set guicursor+=a:blinkon0
 
+set statusline=%F
+set statusline+=:
+set statusline+=%l
+set statusline+=:
+set statusline+=%c
+
 nnoremap ! :!
 map zl zL
 map zh zH

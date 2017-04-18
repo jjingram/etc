@@ -18,7 +18,7 @@ colorscheme default
 " --------------------------------
 " Editor settings
 " --------------------------------
-hi Normal ctermfg=Black ctermbg=NONE cterm=NONE
+hi Normal ctermfg=NONE ctermbg=NONE cterm=NONE
 "hi Cursor ctermfg=NONE ctermbg=NONE cterm=NONE
 hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE
 "hi LineNr ctermfg=NONE ctermbg=NONE cterm=NONE
@@ -36,7 +36,7 @@ hi CursorLineNR ctermfg=NONE ctermbg=NONE cterm=NONE
 " - Window/Tab delimiters -
 " -------------------------
 "hi VertSplit ctermfg=NONE ctermbg=NONE cterm=NONE
-"hi ColorColumn ctermfg=NONE ctermbg=NONE cterm=NONE
+hi ColorColumn ctermfg=NONE ctermbg=Gray cterm=NONE
 "hi TabLine ctermfg=NONE ctermbg=NONE cterm=NONE
 "hi TabLineFill ctermfg=NONE ctermbg=NONE cterm=NONE
 "hi TabLineSel ctermfg=NONE ctermbg=NONE cterm=NONE
@@ -92,14 +92,14 @@ hi Function ctermfg=NONE ctermbg=NONE cterm=NONE
 " --------------------------------
 " Language constructs
 " --------------------------------
-hi Statement ctermfg=NONE ctermbg=NONE cterm=NONE
+hi Statement ctermfg=NONE ctermbg=NONE cterm=bold
 "hi Conditional ctermfg=NONE ctermbg=NONE cterm=NONE
 "hi Repeat ctermfg=NONE ctermbg=NONE cterm=NONE
 "hi Label ctermfg=NONE ctermbg=NONE cterm=NONE
 "hi Operator ctermfg=NONE ctermbg=NONE cterm=NONE
 "hi Keyword ctermfg=NONE ctermbg=NONE cterm=NONE
 "hi Exception ctermfg=NONE ctermbg=NONE cterm=NONE
-hi Comment ctermfg=Gray ctermbg=NONE cterm=NONE
+"hi Comment ctermfg=NONE ctermbg=NONE cterm=NONE
 
 hi Special ctermfg=NONE ctermbg=NONE cterm=NONE
 "hi SpecialChar ctermfg=NONE ctermbg=NONE cterm=NONE

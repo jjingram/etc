@@ -1,5 +1,6 @@
 let
   pkgs = import <nixpkgs> { };
+  allowUnfree = true;
 in {
   packageOverrides = pkgs: with pkgs; rec {
     bash = pkgs.bash.override {
@@ -10,8 +11,10 @@ in {
       name = "jji";
       paths = [
         bash
-        nix-prefetch-git
-        cabal-install
+        stack
+        llvm_4
+        bats
+        irssi
       ];
     };
   };

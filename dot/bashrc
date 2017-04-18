@@ -2,7 +2,6 @@ HISTSIZE=-1
 HISTCONTROL=ignoreboth
 shopt -s histappend
 shopt -s histverify
-
 shopt -s autocd
 PROMPT_COMMAND='[[ ${__new_wd:=$PWD} != $PWD ]] && ls; __new_wd=$PWD'
 
@@ -19,7 +18,9 @@ alias e='$EDITOR'
 alias g='git'
 alias h='history'
 alias -- -='cd -'
-alias ghcid='ghcid --command="stack repl"'
+
+alias stack='stack --nix'
+alias ghcid='ghcid --command="stack --nix repl"'
 
 reset=$(tput sgr0)
 bold=$(tput bold)
@@ -47,3 +48,5 @@ TERMCAP="vt102|$TERM|dec vt102:"'\
 export TERMCAP
 
 source $HOME/.nix-profile/etc/profile.d/nix.sh
+
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
