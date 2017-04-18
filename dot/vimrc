@@ -20,6 +20,7 @@ Plug 'bruno-/vim-man'
 Plug 'ervandew/supertab'
 Plug 'mileszs/ack.vim'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'LnL7/vim-nix'
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'alx741/vim-hindent', {'for': 'haskell'}
 Plug 'klen/python-mode', {'for': 'python'}
@@ -30,7 +31,7 @@ Plug 'kovisoft/slimv', {'for': 'lisp'}
 call plug#end()
 
 set background=light
-colorscheme acme
+colorscheme jji
 
 set textwidth=79
 set clipboard=unnamed
