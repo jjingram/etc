@@ -19,8 +19,7 @@ alias g='git'
 alias h='history'
 alias -- -='cd -'
 
-alias stack='stack --nix'
-alias ghcid='ghcid --command="stack --nix repl"'
+alias ghcid='ghcid --command="stack repl"'
 
 reset=$(tput sgr0)
 bold=$(tput bold)
@@ -46,7 +45,5 @@ TERMCAP="vt102|$TERM|dec vt102:"'\
 	:sc=\E7:rc=\E8:cs=\E[%i%d;%dr:vs=\E[?7l:ve=\E[?7h:\
 	:mi:al=\E[L:dc=\E[P:dl=\E[M:ei=\E[4l:im=\E[4h:'
 export TERMCAP
-
-source $HOME/.nix-profile/etc/profile.d/nix.sh
 
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"

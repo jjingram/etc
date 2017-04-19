@@ -28,3 +28,9 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 for i in $(ls $DIR/vim); do
         ln -sf $DIR/vim/$i "$HOME/.vim/"
 done
+
+echo Linking $DIR/stack/config.yaml to $HOME/.stack/config.yaml
+if [[ ! -d $HOME/.stack ]]; then
+        mkdir $HOME/.stack
+fi
+ln -sf $DIR/stack/config.yaml $HOME/.stack/config.yaml
