@@ -4,38 +4,21 @@ call plug#begin('~/.vim/plug')
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-fugitive'
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-indent'
 Plug 'scrooloose/syntastic'
 Plug 'haya14busa/incsearch.vim'
-Plug 'bruno-/vim-man'
-Plug 'ervandew/supertab'
-Plug 'mileszs/ack.vim'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'LnL7/vim-nix'
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'alx741/vim-hindent', {'for': 'haskell'}
 Plug 'klen/python-mode', {'for': 'python'}
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'def-lkb/ocp-indent-vim', {'for': 'ocaml'}
-Plug 'kovisoft/paredit', {'for': ['scheme', 'racket', 'clojure']}
+Plug 'kovisoft/paredit', {'for': 'scheme'}
 Plug 'kovisoft/slimv', {'for': 'lisp'}
+Plug 'rust-lang/rust.vim', {'for': 'rust'}
 call plug#end()
-
-set background=light
-colorscheme jji
 
 set textwidth=79
 set clipboard=unnamed
-set colorcolumn=80
 set nocursorline
 set nojoinspaces
 set hidden
@@ -54,16 +37,18 @@ set backup
 if has('persistent_undo')
     set undofile undolevels=1000 undoreload=10000
 endif
-set guifont=Anonymous\ Pro\ 18
+
+colorscheme jji
+set background=light
+set guifont=Anonymous\ Pro:h24
 set guioptions=
 set noerrorbells visualbell t_vb=
 set guicursor+=a:blinkon0
-
+set columns=80
+set colorcolumn=0
+set laststatus=1
+set fullscreen
 set statusline=%F
-set statusline+=:
-set statusline+=%l
-set statusline+=:
-set statusline+=%c
 
 nnoremap ! :!
 map zl zL
@@ -78,7 +63,7 @@ vmap > >gv
 autocmd GUIEnter * set visualbell t_vb=
 autocmd BufRead,BufNewFile *.sch setlocal ft=scheme
 autocmd BufWritePre <buffer> call StripTrailingWhitespace()
-autocmd BufRead,BufNewFile *.md setlocal ft=markdown spell linebreak
+autocmd BufRead,BufNewFile *.md setlocal ft=markdown linebreak
 autocmd BufWinEnter quickfix setlocal linebreak
 autocmd FileType haskell setlocal ts=8 et sts=2 sw=2 sr
 autocmd FileType c,cpp,make setlocal ts=8 noet
@@ -117,6 +102,11 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
 set rtp^="/Users/jji/.opam/system/share/ocp-indent/vim"
+
+function! DistractionFree()
+        set lines=40 columns=80
+        set fullscreen
+endfunction
 
 function! StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.

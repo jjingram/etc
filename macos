@@ -29,3 +29,7 @@ defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+# MacVim should display its contents in the middle-ish part of the screen
+defaults write org.vim.MacVim MMTextInsetLeft 200
+defaults write org.vim.MacVim MMTextInsetRight 200

@@ -46,4 +46,4 @@ TERMCAP="vt102|$TERM|dec vt102:"'\
 	:mi:al=\E[L:dc=\E[P:dl=\E[M:ei=\E[4l:im=\E[4h:'
 export TERMCAP
 
-export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
