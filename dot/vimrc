@@ -4,6 +4,9 @@ call plug#begin('~/.vim/plug')
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-vinegar'
 Plug 'scrooloose/syntastic'
 Plug 'haya14busa/incsearch.vim'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -46,9 +49,11 @@ set noerrorbells visualbell t_vb=
 set guicursor+=a:blinkon0
 set columns=80
 set colorcolumn=0
-set laststatus=1
-set fullscreen
+set laststatus=2
 set statusline=%F
+if has('gui_macvim')
+        set fullscreen
+endif
 
 nnoremap ! :!
 map zl zL
@@ -78,12 +83,6 @@ map # <Plug>(incsearch-nohl-#)
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
-map K <Plug>(Man)
-
-if executable('ag')
-    let g:ackprg = 'ag --vimgrep'
-endif
-
 let g:ctrlp_cmd = 'CtrlPBuffer'
 
 let g:hindent_on_save = 1
@@ -91,10 +90,6 @@ let g:hindent_indent_size = 2
 let g:hindent_line_length = 79
 
 let g:vim_markdown_folding_disabled = 1
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
