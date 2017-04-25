@@ -96,8 +96,6 @@ let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
-set rtp^="/Users/jji/.opam/system/share/ocp-indent/vim"
-
 function! DistractionFree()
         set lines=40 columns=80
         set fullscreen
