@@ -1,6 +1,0 @@
-bind `:alt move screenOriginX;screenOriginY screenSizeX;screenSizeY
-
-bind 1:alt focus 'Finder'
-bind 2:alt focus 'iTerm2'
-bind 3:alt focus 'Google Chrome'
-bind 4:alt focus 'Spotify'

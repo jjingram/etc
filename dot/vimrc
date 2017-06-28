@@ -73,6 +73,7 @@ autocmd BufWinEnter quickfix setlocal linebreak
 autocmd FileType haskell setlocal ts=8 et sts=2 sw=2 sr
 autocmd FileType c,cpp,make setlocal ts=8 noet
 autocmd FileType c,cpp setlocal cin fo=tcroqnl cino=:0,l1,t0,g0,(s,m1,j1,J1
+autocmd FileType java setlocal ai si sw=4
 
 set hlsearch
 let g:incsearch#auto_nohlsearch = 1
@@ -95,6 +96,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
+let g:syntastic_java_checkers = ['']
 
 function! DistractionFree()
         set lines=40 columns=80

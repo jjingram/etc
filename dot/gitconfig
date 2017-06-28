@@ -19,7 +19,7 @@ compare = !sh -c 'git diff `git merge-base $2 $1`..$1' -
 status = true
 
 [user]
-email = jarrod.jeffi@gmail.com
+email = jarrod.ingram@rungopher.com
 name = Jarrod Jeffrey Ingram
 
 [diff]
